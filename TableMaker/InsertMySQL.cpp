@@ -109,7 +109,7 @@ int main(int argc, const char *argv[]) {
 								
 								norSize = command.size();
 								command.erase(norSize-3);	// remove 1 e espaco final
-								command.append("'");
+								command.append(" '");		// recoloca o espaco, pois facilita desmembrar em vetor
 								
 							}
 							
@@ -121,13 +121,18 @@ int main(int argc, const char *argv[]) {
 								command.append("'");
 						}
 					}
+					
+					else if(!strcmp(tcol_ins[table_index][i-2],"double")) {
+						command.append(", ");
+						command.append(argv[i]);
+					}
 		}
 		
 		command.append(")");
 		/* Fim da conversao */
 		
 		/* Debug */
-		cout << command << endl;
+		//cout << command << endl;
 
 		/* Finalmente insere */
 		pstmt = con->prepareStatement(command);
