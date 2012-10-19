@@ -8,7 +8,7 @@
 
 
 #define K_HASH_A 22
-// 21 pra arrumar o indice.
+// 22 pra arrumar o indice.
 #define K_HASH_B 21
 // evita uma comparação dentro do heapfy
 // K_HASH_B = K_HASH_A - 1
@@ -24,15 +24,15 @@ int isNor (string text);
 // Heap Magico de Max
 class KMaxHash {
 private:
-    void Heapfy();
-    void Heapfy(int last);
-    double valores[K_HASH_A];
+    void Heapfy();                              // Heapfy a partir do 1 ate o 20          
+    void Heapfy(int last);                      // Heapfy a partir do 1 ate o Last
+    double valores[K_HASH_A];                   // Valores de cada indice
 public:
-    int index [K_HASH_A];
-    KMaxHash();
-    void Attempt(double dist, int indice);
-    void OrderHash();
-    void PrintHash();
+    int index [K_HASH_A];                       // Indice das entradas do hash
+    KMaxHash();                                 // Construtor do Hash, com entradas invalidas
+    void Attempt(double dist, int indice);      // Tenta inserir um termo no hash
+    void OrderHash();                           // Ordena o hash : Heapsort
+    void PrintHash();                           // Imprimi do 1 ate o 20
 };
 
 KMaxHash::KMaxHash() {
@@ -43,17 +43,16 @@ KMaxHash::KMaxHash() {
     }
     
     // Adiciono um com distancia negativa ( - inf )
-    // index -1 inválido
+    // index -1 inválido, isso faz sobrar um termo no final do heap
     valores[K_HASH_B]=-1;
     index[K_HASH_B]=-1;
 }
 
 void KMaxHash::Attempt(double dist, int indice) {
-    if(valores[1]>dist) {
-        valores[1]=dist;
+    if(valores[1]>dist) {               // Se for menor que o maximo
+        valores[1]=dist;                // ponto de interesse, trocar
         index[1]=indice;
-        Heapfy();
-        // HEAPFY : mudou, precisa heapfy!
+        Heapfy();                       // e Heapfy
     }
 }
 
@@ -72,16 +71,16 @@ void KMaxHash::Heapfy() {
         if(valores[r]>valores[l])       // se o [r] é maior que [l]
             l=r;                        // substitui
         
-        if(valores[l]>valores[f]) {
-            d_swap=valores[f];
+        if(valores[l]>valores[f]) {     // ve se o maior filho eh maior que o pai
+            d_swap=valores[f];          // se for troca
             valores[f]=valores[l];
             valores[l]=d_swap;
             i_swap=index[f];
             index[f]=index[l];
             index[l]=i_swap;
-            f=l;
+            f=l;                        // e troca o pai
         }
-        else
+        else                            // se nao for para
             break;
         
         l=2*f;          // calcula filhos
@@ -102,11 +101,11 @@ void KMaxHash::Heapfy(int last) {
     
     // Aqui, tendo um -inf, nao importa a possível comparaçao com o ultimo termo
     while (l<last) {
-        if(r<last)
+        if(r<last)                          // verifica-se se o filho direito estoura
             if(valores[r]>valores[l])       // se o [r] é maior que [l]
                 l=r;                        // substitui
         
-        if(valores[l]>valores[f]) {
+        if(valores[l]>valores[f]) {         // se o filho for maior, troca
             d_swap=valores[f];
             valores[f]=valores[l];
             valores[l]=d_swap;
@@ -125,26 +124,26 @@ void KMaxHash::Heapfy(int last) {
 
 
 void KMaxHash::OrderHash() {
-    int end = K_HASH_C;
+    int end = K_HASH_C;                 // Heapsort
     int i;
     
     double d_swap;
     int i_swap;
     
-    for(i=1; i<K_HASH_C; i=i+1) {
-        d_swap=valores[end];
+    for(i=1; i<K_HASH_C; i=i+1) {      // Pega 20 termos e ordena (O(n))
+        d_swap=valores[end];           // Troca o primeiro e o ultimo
         valores[end]=valores[1];
         valores[1]=d_swap;
         i_swap=index[end];
         index[end]=index[1];
         index[1]=i_swap;
-        end=end-1;
-        Heapfy(end);
+        end=end-1;                      // Atualiza contador e heapfy
+        Heapfy(end);                    // O(log n)
     }
 }
 
 
-void KMaxHash::PrintHash() {
+void KMaxHash::PrintHash() {            // Apenas imprimi os indices e valores 
     int i;
     
     cout << endl;
@@ -157,26 +156,25 @@ void KMaxHash::PrintHash() {
 }
 
 
-class Vetorzao {
+class Vetorzao {                                        // Vetor que representa as 1000 dimensoes
 	public:
-            void reset(string Coord);
-            double coordenadas[1000];
-            //Vetorzao(string Coord);
-            double compararDistancia(Vetorzao Outro);
+            void reset(string Coord);                   // Reseta o vetor (ou cria)
+            double coordenadas[1000];                   // Coordenadas
+            double compararDistancia(Vetorzao Outro);   // Compara a distancia com outro vetor
 };
 
-void Vetorzao::reset(string Coord) {
-    	int w;
+void Vetorzao::reset(string Coord) {                    // Inicializa o vetor Coordenadas
+    	int w;                                          // A partir de uma string
 	int vi=0;
 	int term_a=0;
 	char term[20];
 	
 	for(w=0; w<1000; w=w+1) {
 		
-		while(Coord[vi]==' ')
+		while(Coord[vi]==' ')                   // Pula espacos
 			vi=vi+1;
 			
-		while(Coord[vi]!=' ') {
+		while(Coord[vi]!=' ') {                 // Pega o termo double
 			vi=vi+1;
 			term[term_a]=Coord[vi];
 			term_a=term_a+1;
@@ -184,16 +182,11 @@ void Vetorzao::reset(string Coord) {
 		
 		term[term_a] = ' ';
 		
-		coordenadas[w] = atof(term);
+		coordenadas[w] = atof(term);            // Convenrte para double
 		term_a=0;
 		
-		//cout << "Termo" << w << ": " << coordenadas[w] << endl;
 	}
 }
-
-/*Vetorzao::Vetorzao (string Coord) {
-    reset(Coord);
-}*/	
 
 
 double Vetorzao::compararDistancia(Vetorzao Outro) {
@@ -201,17 +194,17 @@ double Vetorzao::compararDistancia(Vetorzao Outro) {
 	double sum=0;
 	double aux=0;
 	
-	for(w=0; w<1000; w=w+1) {
-		aux=coordenadas[w]-Outro.coordenadas[w];
-		aux=aux*aux;
-		sum=sum+aux;
+	for(w=0; w<1000; w=w+1) {       // Para cada dimensao
+		aux=coordenadas[w]-Outro.coordenadas[w];       
+		aux=aux*aux;            // Subtrai uma da outra, eleva ao quadrado
+		sum=sum+aux;            // E soma no total
 	}
 	
-	return sum;
+	return sum;                     // Note a falta de sqrt()
 }
 	
 
-double diffclock(clock_t clock1,clock_t clock2)
+double diffclock(clock_t clock1,clock_t clock2) // Calcular diferenca de tempo
 {
 	double diffticks=clock1-clock2;
 	double diffms=(diffticks*1000)/CLOCKS_PER_SEC;
@@ -222,9 +215,7 @@ double diffclock(clock_t clock1,clock_t clock2)
 int main(int argc, const char *argv[]) {
 // Sintaxe : ./App /folder/file.nor    
         
-    
         clock_t begin=clock();
-        
     
         int counter=0;
     
@@ -301,7 +292,11 @@ int main(int argc, const char *argv[]) {
 	  	delete res;
 	  	delete pstmt;
 	  	delete con;
+                delete &Vet1;
+                delete &Vet2;
+                delete &MyHash;
                 
+                /* Calculo de tempo */
                 clock_t end=clock();
                 cout << "Time elapsedd: " << double(diffclock(end,begin)) << " ms"<< endl;
                 
@@ -316,27 +311,4 @@ int main(int argc, const char *argv[]) {
         
         
 	return 0;
-}
-
-
-/* 	Testa pra ver se um parametro do tipo varchar é um arquivo .nor
- 	Retorna 0 se nao for .nor e 1 se for */
-int isNor (string text) {
-	
-	int i;
-	int end;
-	int j=3;
-	
-	if(text.size()<5)
-		return 0;
-	
-	end =(int) text.size();
-	
-	for(i=end-1;i>end-4;i=i-1) {
-		if(text[i]!=nor[j])
-			return 0;
-		j=j-1;
-	}
-	
-	return 1;	// é um arquivo
 }
