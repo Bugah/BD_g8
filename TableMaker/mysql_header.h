@@ -24,34 +24,38 @@
 #define USER "root"
 #define PASSWORD ""
 #define DATABASE "test"
-#define LAST_TABLE 3
+#define LAST_TABLE 2
 
 #endif
 
 /* Dados das tabelas */
 
-const char* TABLE_NAME[] = {"VECTORS", "TABIMG", "SEARCHTABLE"};
-const int NUMCOLS[] = {2,3,4};
-const int ISTHEREKEY[] = {1,1,1};
-const int WHOIS[] = {0,0,0};
+const char* TABLE_NAME[] = {"VECTORS", "TABIMG"};
 
-const char  *tcol[][4] = 
+// const int NUMCOLS[] = {6,3};
+const int NUMCOLS[] = {2,3};
+
+const int ISTHEREKEY[] = {1,1};
+const int WHOIS[] = {0,0};
+
+const char  *tcol[][7] = 
 {
-{"int", "varchar (20000)"},					// Primeira Tabela : VECTORS
-{"int","varchar(15)", "varchar(511)"},		// Segunda Tabela : TABIMG
-{"int", "double", "double", "double"}
-}	;	
+    
+//{"int", "varchar (20000)","double","double","double","double"},
+{"int", "varchar (20000)"},                                     // Primeira Tabela : VECTORS
+{"int","varchar(15)", "varchar(511)"}
+};	
 
-const char* tcol_ins[][4]  = {
-{"int", "varchar"},							// Primeira Tabela : VECTORS
-{"int", "varchar", "varchar"},				// Segunda Tabela : TABIMG
-{"int", "double", "double", "double"}
+const char* tcol_ins[][7]  = {
+//{"int", "varchar","double", "double", "double", "double"},    // Primeira Tabela : VECTORS
+{"int", "varchar"},
+{"int", "varchar", "varchar"}                                   // Segunda Tabela : TABIMG
 };
 
-const char* ncol[][4] = {
-{"Id", "Coord"},							// Primeira Tabela : VECTORS
-{"Id", "Nome", "Tags"},						// Segunda Tabela : TABIMG
-{"Id", "D1", "D2", "D3"}
+const char* ncol[][7] = {
+//{"Id", "Coord","H1", "H2", "H3","H4"},                          // Primeira Tabela : VECTORS
+{"Id", "Coord"},
+{"Id", "Nome", "Tags"}                                          // Segunda Tabela : TABIMG
 };
 
 /* Formato dos arquivos esperados */

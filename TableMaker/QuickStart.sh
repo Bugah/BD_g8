@@ -1,11 +1,11 @@
 #!/bin/bash
 
 TOTAL="5000"			# numero de arquivos
-i="1"					# iterador
+i="1"				# iterador
 NOREXTENSION=".nor"		# extensao .nor
-TAGSEXTENSION=".tags"	# extensao .tags
+TAGSEXTENSION=".tags"         # extensao .tags
 NORPATH="norFiles/"		# path dos arquivos .nor
-TAGSPATH="jpgFiles/"	# path dos arquivos .jpg
+TAGSPATH="jpgFiles/"          # path dos arquivos .jpg
 
 TOTAL=$[$TOTAL+1]		# inicializa
 
@@ -33,11 +33,11 @@ while [ $i -lt $TOTAL ]; do
 	then
 		if [ -s $NORPATH$FILENAME$i$NOREXTENSION ]		# testa se esta vazio
 		then
-			echo ./InsertMySQL 1 $i $NORPATH$FILENAME$i$NOREXTENSION
+			#echo ./InsertMySQL 1 $i $NORPATH$FILENAME$i$NOREXTENSION
 			./InsertMySQL 1 $i $NORPATH$FILENAME$i$NOREXTENSION
-		    # Arquivo encontrado e com algum texto, insere no banco VECTORS
+                        # Arquivo encontrado e com algum texto, insere no banco VECTORS
 			
-			echo ./InsertMySQL 2 $i $FILENAME$i $TAGSPATH$FILENAME$i$TAGSEXTENSION 
+			#echo ./InsertMySQL 2 $i $FILENAME$i $TAGSPATH$FILENAME$i$TAGSEXTENSION 
 			./InsertMySQL 2 $i $FILENAME$i $TAGSPATH$FILENAME$i$TAGSEXTENSION 
 			# insere no banco TABIMG
 		else
