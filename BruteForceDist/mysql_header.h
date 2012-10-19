@@ -26,7 +26,13 @@
 #define DATABASE "test"
 #define LAST_TABLE 2
 
+/* Raio a ser determinado */
+#define RAIOMAX 0.025495
+// Coloquei um valor privisório.
+
 #endif
+
+const double Raio2 = RAIOMAX * RAIOMAX;
 
 /* Dados das tabelas */
 

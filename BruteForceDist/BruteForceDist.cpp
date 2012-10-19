@@ -17,9 +17,7 @@
 
 /* Namespaces necessarios */
 using namespace std;
-using namespace sql::mysql;
-
-int isNor (string text);	
+using namespace sql::mysql;	
 
 // Heap Magico de Max
 class KMaxHash {
@@ -281,7 +279,7 @@ int main(int argc, const char *argv[]) {
 		}
 		
                 MyHash.OrderHash();
-                //MyHash.PrintHash();
+                MyHash.PrintHash();
                 
                 //cout << endl << "Counter: " << counter << endl;
                 
@@ -292,9 +290,6 @@ int main(int argc, const char *argv[]) {
 	  	delete res;
 	  	delete pstmt;
 	  	delete con;
-                delete &Vet1;
-                delete &Vet2;
-                delete &MyHash;
                 
                 /* Calculo de tempo */
                 clock_t end=clock();
