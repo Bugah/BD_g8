@@ -73,7 +73,7 @@ void KMaxHash::Heapfy(int last) {
     
     // Aqui, tendo um -inf, nao importa a possível comparaçao com o ultimo termo
     while (l<last) {
-        if(r<last)                          // verifica-se se o filho direito estoura
+        if(r<=last)                          // verifica-se se o filho direito estoura
             if(valores[r]>valores[l])       // se o [r] é maior que [l]
                 l=r;                        // substitui
         
@@ -102,7 +102,15 @@ void KMaxHash::OrderHash() {
     double d_swap;
     int i_swap;
     
-    for(i=1; i<K_HASH_C; i=i+1) {      // Pega 20 termos e ordena (O(n))
+    for(i=1; i<K_HASH_C; i=i+1) {      // Pega 20 termos e ordena (O(n)
+        
+        // antes de trocar //
+        //cout << "Antes da troca" << i << " " << endl;
+        
+        //PrintHash();
+        
+        // Fim Debug //
+        
         d_swap=valores[end];           // Troca o primeiro e o ultimo
         valores[end]=valores[1];
         valores[1]=d_swap;
@@ -110,6 +118,14 @@ void KMaxHash::OrderHash() {
         index[end]=index[1];
         index[1]=i_swap;
         end=end-1;                      // Atualiza contador e heapfy
+        
+                // antes de trocar //
+        //cout << "Depois da Troca" << i << " " << endl;
+        
+        //PrintHash();
+        
+        // Fim Debug //
+        
         Heapfy(end);                    // O(log n)
     }
 }
