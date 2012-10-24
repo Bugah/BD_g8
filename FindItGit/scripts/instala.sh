@@ -37,7 +37,7 @@ do
 		firefox localhost/FindItGit &
 		;;
 	"2")	
-		echo "Digite o diretório origem das imagens"
+		echo "Digite o diretório origem das imagens .jpg"
 			read -r dir
 			!(test -d $dir) && echo "'$dir' não é um diretório válido..."
 			cp $dir/*.jpg $mainDir/builtIn/upload/fmt/
