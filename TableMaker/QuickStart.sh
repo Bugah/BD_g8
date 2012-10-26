@@ -3,9 +3,10 @@
 TOTAL="5000"			# numero de arquivos
 i="1"				# iterador
 NOREXTENSION=".nor"		# extensao .nor
-TAGSEXTENSION=".tags"         # extensao .tags
+TAGSEXTENSION=".tags"           # extensao .tags
 NORPATH="norFiles/"		# path dos arquivos .nor
-TAGSPATH="jpgFiles/"          # path dos arquivos .jpg
+TAGSPATH="jpgFiles/"            # path dos arquivos .jpg
+CONTROL="0"
 
 TOTAL=$[$TOTAL+1]		# inicializa
 
@@ -29,15 +30,23 @@ while [ $i -lt $TOTAL ]; do
 		fi
 	fi
 	
+	if [ $CONTROL = "200" ]; then
+		echo $i Gone!
+		CONTROL="0"
+	fi
+	
+	CONTROL=$[$CONTROL+1]
+	
+	
 	if [ -e $NORPATH$FILENAME$i$NOREXTENSION ]			# testa existencia
 	then
 		if [ -s $NORPATH$FILENAME$i$NOREXTENSION ]		# testa se esta vazio
 		then
-			#echo ./InsertMySQL 1 $i $NORPATH$FILENAME$i$NOREXTENSION
-			./InsertMySQL 1 $i $NORPATH$FILENAME$i$NOREXTENSION
+			#echo ./InsertMySQL 1 $i $NORPATH$FILENAME$i$NOREXTENSION 1.nor
+			./InsertMySQL 1 $i $NORPATH$FILENAME$i$NOREXTENSION 1.nor
                         # Arquivo encontrado e com algum texto, insere no banco VECTORS
 			
-			#echo ./InsertMySQL 2 $i $FILENAME$i $TAGSPATH$FILENAME$i$TAGSEXTENSION 
+			#echo ./InsertMySQL 2 $i $FILENAME$i $TAGSPATH$FILENAME$i$TAGSEXTENSION
 			./InsertMySQL 2 $i $FILENAME$i $TAGSPATH$FILENAME$i$TAGSEXTENSION 
 			# insere no banco TABIMG
 		else

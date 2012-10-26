@@ -9,16 +9,20 @@
 #define	VETORZAO_H
 	
 #include <string>
-using std::string;
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 class Vetorzao {
 	public:
-            void reset(string Coord);
             double coordenadas[1000];
-            //Vetorzao(string Coord);
+            void reset(string Coord);
+            void resetNor(const char * myfile);
             double compararDistancia(Vetorzao Outro);
+            double compararDistancia(Vetorzao Outro, double Max);
             Vetorzao();
+            void distribution();
 };
 
 #endif	/* VETORZAO_H */
-

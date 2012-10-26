@@ -2,12 +2,12 @@
 #include <iostream>
 #include <cppconn/exception.h>
 #include <sstream>
+#include <fstream>
 #include "mysql_header.h"
 
 /* Namespaces necessarios */
 using namespace std;
 using namespace sql::mysql;
-
 	
 int main(int argc, const char *argv[]) {
 	int i;							// iterador
