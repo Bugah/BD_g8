@@ -120,10 +120,10 @@ void KMaxHeap::OrderHash() {
 void KMaxHeap::PrintHash() {            // Apenas imprimi os indices e valores 
     int i;
     cout << endl;
-    
-        for(i=1; i<K_HASH_B; i=i+1)
-            cout << index[i] << " : " << valores[i] << " " << endl;
-    
+    cout.fill('0');
+        for(i=1; i<K_HASH_B; i=i+1) {
+            cout << setw(6) << index[i] << " : " << valores[i] << " " << endl;
+        }   
     cout << endl;
     
 }

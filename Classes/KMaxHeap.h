@@ -19,6 +19,7 @@
 // K_HASH_C = K_HASH_B - 1 = K_HASH_A - 2 = numero de termos
 
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
