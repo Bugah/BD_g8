@@ -4,8 +4,8 @@ TOTAL="5000"			# numero de arquivos
 i="1"				# iterador
 NOREXTENSION=".nor"		# extensao .nor
 TAGSEXTENSION=".tags"           # extensao .tags
-NORPATH="norFiles/"		# path dos arquivos .nor
-TAGSPATH="jpgFiles/"            # path dos arquivos .jpg
+NORPATH="/home/guilherme/MC536/Grupo/Moco/norFiles/"		# path dos arquivos .nor
+TAGSPATH="/var/www/html/FI/builtIn/upload/fmt/"            # path dos arquivos .jpg
 CONTROL="0"
 
 TOTAL=$[$TOTAL+1]		# inicializa

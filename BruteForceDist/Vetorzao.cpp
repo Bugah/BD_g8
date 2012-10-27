@@ -6,6 +6,7 @@
  */
 
 #include "Vetorzao.h"
+#include <stdlib.h>
 
 Vetorzao::Vetorzao() {
 }

@@ -3,56 +3,52 @@
 #include <cppconn/exception.h>
 #include "mysql_header.h"
 #include <iomanip>
-#include <fstream>
-#include <time.h>
+#include <sstream>
+#include <math.h>
 #include "Vetorzao.h"
-#include "KMaxHash.h"
+#include "KMaxHeap.h"
+#include "Relogio.h"
 
 /* Namespaces necessarios */
 using namespace std;
 using namespace sql::mysql;	
 
-double diffclock(clock_t clock1,clock_t clock2) // Calcular diferenca de tempo
-{
-	double diffticks=clock1-clock2;
-	double diffms=(diffticks*1000)/CLOCKS_PER_SEC;
-	return diffms;
-} 
-
-
 int main(int argc, const char *argv[]) {
 // Sintaxe : ./App /folder/file.nor    
-        
-        clock_t begin=clock();
     
-        int counter=0;
+        Relogio relogio;                // Relogio
+        relogio.reset();
     
         int i;				// iterador
-	string command="SELECT * FROM VECTORS";
-	
-	ifstream file_nor;					// descritor do arquivo
-	string output;						// auxiliar de leitura
-	string initial;						// usado pra inicializar vetores .nor
+	string command="SELECT * FROM VECTORS WHERE";
 
 	/* Variaveis de coneccao */
 	sql::mysql::MySQL_Driver *driver;
 	sql::Connection *con;
-	sql::ResultSet *res;
 	sql::PreparedStatement *pstmt;
+        sql::ResultSet *res;
+       
+        double max;             // Marcam pontos de interesse em relacao ao hash  
+        double minimo;  
         
-        double Distancia;
-        int indice;
+        double d_hash;      
+        KMaxHeap MyHash;        // Hash que guarda os 20 melhores
+
+        Vetorzao Vet1;          // Vetor1, guarda o .nor passado.
+        Vetorzao Vet2;          // Auxiliar
         
-        Vetorzao Vet1;
-        Vetorzao Vet2;
+        double Distancia;       // Auxiliar pra calcular a distância
+        int indice;             // Auxiliar pra ver qual indice do mysql        
+        string initial;         // auxiliar pra carregar no mysql	
+        int counter=0;          // contador de carregamentos
         
-        KMaxHash MyHash;
-	
+        
 	try {
-		if(argc!=2) {
-			cout << "Argumentos errados" << endl;
-			return -1;
-		}
+            
+		//if(argc!=12) {
+//			cout << "Argumentos errados" << endl;
+//			return -1;
+//		} 
 		
 		/* Aumenta precisão de impressão */
 		cout << setprecision (15);
@@ -62,50 +58,74 @@ int main(int argc, const char *argv[]) {
 		con = driver->connect(DBHOST, USER, PASSWORD);
 		con->setSchema(DATABASE);
 		/* Fim da coneccao ao schema definido no header */
+                
 		
-		initial.clear();
-		file_nor.open(argv[1], ios::out);
-		file_nor >> output;
-			
-		while (!file_nor.eof()) {
-			initial.append(output);
-			initial.append(" "); 
-			file_nor >> output;
-		}
-		
-                Vet1.reset(initial);		
+                Vet1.resetNor(argv[1]);
+                
+ 
+                std::ostringstream os_min; 
+                std::ostringstream os_max; 
+                string min_s;
+                string max_s;
+
+                Vet2.resetNor(argv[2]);
+                    
+                d_hash=sqrt(Vet2.compararDistancia(Vet1));
+                    
+                if(d_hash>RAIOMAX)
+                    minimo=d_hash-RAIOMAX;
+                else 
+                    minimo=RAIOMAX-d_hash;
+                    
+                max=d_hash+RAIOMAX;
+
+                os_min << fixed << setprecision(15) << minimo;
+                min_s = os_min.str();
+                    
+                os_max << fixed << setprecision(15) << max;
+                max_s = os_max.str();
+                   
+                command.append(" ");
+                command.append(ncol[0][2]);
+                command.append(">");
+                command.append(min_s);
+                command.append(" AND ");
+                command.append(ncol[0][2]);
+                command.append("<");
+                command.append(max_s);
+                
+                //cout << command << endl;
 
 		pstmt = con->prepareStatement(command);
 		res = pstmt->executeQuery();
 
-		while (res->next()) {
-                    indice = res->getInt("Id");
-                    initial = res->getString("Coord");
+                
+   		while (res->next()) {
+                    initial = res->getString("Coord");  
+
                     Vet2.reset(initial);
-                    Distancia=Vet2.compararDistancia(Vet1);
-                    //cout << "Index: " << indice << " -> " << Distancia << endl;
-                    MyHash.Attempt(Distancia, indice);
-                    counter = counter + 1;
-		}
-		
+                    Distancia=sqrt(Vet2.compararDistancia(Vet1, MyHash.GetHigher()));
+
+                    if(Distancia<=RAIOMAX) {
+                        indice = res->getInt("Id");
+                        MyHash.Attempt(Distancia, indice);
+                    }
+                        
+                        counter = counter + 1;    
+                    
+		} 
+                
                 MyHash.OrderHash();
                 MyHash.PrintHash();
                 
-                //cout << endl << "Counter: " << counter << endl;
+                cout << endl << "counter_main: " << counter << endl;
+                cout << "Time elapsedd: " << double(relogio.diffclock()) << " ms" << endl;
                 
-		//Vetorzao Vet2(initial);
-		
-		//Distancia = Vet2.compararDistancia(Vet1);
-		
 	  	delete res;
 	  	delete pstmt;
-	  	delete con;
+	  	delete con; 
+  
                 
-                /* Calculo de tempo */
-                clock_t end=clock();
-                cout << "Time elapsedd: " << double(diffclock(end,begin)) << " ms"<< endl;
-                
-		
 	} catch (sql::SQLException &e) {	// Para encontrar erros!
 			cout << "# ERR: SQLException in " << __FILE__;
 			cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;	
@@ -113,7 +133,6 @@ int main(int argc, const char *argv[]) {
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
-        
         
 	return 0;
 }

@@ -53,8 +53,9 @@ bool RepHash::Check(int term) {
 void RepHash::PrintHash() {
     int j;
     
+//    cout.fill('0');
     for(j=0;j<2000;j=j+1) {
-        cout << indice[j] << " ";
+        cout <<  indice[j] << " ";
         if(j%10==0)
             cout << endl;
     }

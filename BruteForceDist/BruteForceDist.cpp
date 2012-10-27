@@ -20,7 +20,7 @@ int main(int argc, const char *argv[]) {
         relogio.reset();
     
         int i;				// iterador
-	string command="SELECT * FROM Vectors WHERE";
+	string command="SELECT * FROM VECTORS WHERE";
 
 	/* Variaveis de coneccao */
 	sql::mysql::MySQL_Driver *driver;
@@ -119,7 +119,7 @@ int main(int argc, const char *argv[]) {
                 MyHash.PrintHash();
                 
                 cout << endl << "counter_main: " << counter << endl;
-                cout << "Time elapsedd: " << double(relogio.diffclock()) << " ms" << endl;
+                cout << "Time elapsed: " << double(relogio.diffclock()) << " ms" << endl;
                 
 	  	delete res;
 	  	delete pstmt;

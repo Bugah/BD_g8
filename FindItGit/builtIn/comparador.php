@@ -62,21 +62,23 @@ if ($_FILES["file"]["type"])
 		pclose($handle);
 	  /******************************************************************************/
 	  mostraTempoAlt("normalização");
+	  echo "<br />";
 	  acionaTempo();
 	  // Procurando imagens semelhantes
       error_reporting(E_ALL);
 		/* Add redirection so we can get stderr. */
-		$cmd = 'tmp/tools/BruteForceDist/BruteForceDist tmp/'.substr($_FILES["file"]["name"], 0, -4). '.nor 2>&1';
-		// echo $cmd;
-		// echo "<br />";
+		$cmd = 'tmp/tools/BruteForceDist/BruteForceDist tmp/'.substr($_FILES["file"]["name"], 0, -4). '.nor tmp/tools/BruteForceDist/1.nor 2>&1';
+		 echo "<br />";
+		 echo $cmd;
+		 echo "<br />";
 		//$handle = popen($cmd, 'r');
 		//passthru($cmd, $test);
 		
 		/* Executa o comando e retorna a saída para $test */
 		exec($cmd,$test);
 		//print_r($test);
-		for($i=0;$i<19;$i++) {
-			$string[$i] = "IMG".reset(explode(" : ", $test[$i+2]));
+		for($i=0;$i<20;$i++) {
+			$string[$i] = "IMG".reset(explode(" : ", $test[$i+1]));
 			//echo ", ";
 			//print($string[$i]);
 		}
