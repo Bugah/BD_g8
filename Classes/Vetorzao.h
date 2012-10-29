@@ -8,21 +8,29 @@
 #ifndef VETORZAO_H
 #define	VETORZAO_H
 	
+#define SIZE 1000
+
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <math.h>
+#include <vector>
+#include "KMaxHeap.h"
 
 using namespace std;
 
 class Vetorzao {
 	public:
-            double coordenadas[1000];
+            int indice;
+            double coordenadas[SIZE];
             void reset(string Coord);
+            void reset(string Coord, int ind);
             void resetNor(const char * myfile);
             double compararDistancia(Vetorzao Outro);
             double compararDistancia(Vetorzao Outro, double Max);
             Vetorzao();
+            double normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHeap * heapzim);
             void distribution();
 };
 

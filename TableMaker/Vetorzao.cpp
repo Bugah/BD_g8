@@ -17,7 +17,7 @@ void Vetorzao::reset(string Coord) {
 	int term_a=0;
 	char term[20];
         	
-	for(w=0; w<1000; w=w+1) {
+	for(w=0; w<SIZE; w=w+1) {
             
 		while(Coord[vi]==' ') 
                     vi=vi+1;
@@ -37,12 +37,16 @@ void Vetorzao::reset(string Coord) {
 }
 
 
+void Vetorzao::reset(string Coord, int ind) {
+    indice=ind;
+    reset(Coord);
+}
+
+
 void Vetorzao::resetNor(const char * myfile) {
     string initial;
     ifstream file_nor;				// descritor do arquivo
     string output;				// auxiliar de leitura
-    
-    cout << "Reset Nor" << endl;
     
     file_nor.open(myfile, ios::out);
     file_nor >> output;
@@ -53,7 +57,6 @@ void Vetorzao::resetNor(const char * myfile) {
         file_nor >> output;
     }
     
-    cout << initial << endl;
     reset(initial);   
 }
 
@@ -63,7 +66,7 @@ double Vetorzao::compararDistancia(Vetorzao Outro) {
 	double sum=0;
 	double aux=0;
 	
-	for(w=0; w<1000; w=w+1) {
+	for(w=0; w<SIZE; w=w+1) {
 		aux=coordenadas[w]-Outro.coordenadas[w];
 		aux=aux*aux;
 		sum=sum+aux;
@@ -73,6 +76,7 @@ double Vetorzao::compararDistancia(Vetorzao Outro) {
 }
 
 
+// Calcula usando a euclidiana
 double Vetorzao::compararDistancia(Vetorzao Outro, double Max) {
 	int w;
         int y;
@@ -80,13 +84,13 @@ double Vetorzao::compararDistancia(Vetorzao Outro, double Max) {
 	double sum=0;
 	double aux=0;
         
-        for(w=0; w<1000; w=w+1) {
+        for(w=0; w<SIZE; w=w+1) {
                 aux=coordenadas[w]-Outro.coordenadas[w];
 		aux=aux*aux;
 		sum=sum+aux;
                 
             if(sum>Max) 
-                w=1000;
+                w=SIZE;
             
 	} 
 
@@ -102,7 +106,7 @@ void Vetorzao::distribution() {
     
     cout << endl;
    
-    for(it=0; it<1000; it=it+1) {
+    for(it=0; it<SIZE; it=it+1) {
         sum=sum+coordenadas[it];
         
         if(((it+1)%space)==0) {
@@ -112,4 +116,62 @@ void Vetorzao::distribution() {
             sum=sum=0;
         }       
     }
+}
+
+
+// Calcula todas as Distancias Euclidianas Normalizadas, devolve resultado no heap
+double Vetorzao::normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHeap * heapzim) {
+    double x_barra_j[SIZE];
+    double s_barra_j[SIZE];
+    double zij;
+    double zkj;
+    double sum=0;
+    
+    int i;
+    int j;
+    
+    for(i=0; i<SIZE; i=i+1) {
+        x_barra_j[i]=0;
+        s_barra_j[i]=0;
+    }   
+    
+    // Obtem a media
+    
+    for(i=0; i<Outros.size(); i=i+1) {
+        for(j=0; j<SIZE; j=j+1) 
+            x_barra_j[j]=x_barra_j[j]+Outros[i].coordenadas[j];               
+    }
+    
+    for(i=0; i<SIZE; i=i+1)
+        x_barra_j[i]=x_barra_j[i]/1000;
+    
+        
+    // Obtem o desvio padrao
+   
+    for(i=0; i<Outros.size(); i=i+1) {
+        for(j=0; j<SIZE; j=j+1) 
+            s_barra_j[j]=s_barra_j[j]+((Outros[i].coordenadas[j]-x_barra_j[j])*(Outros[i].coordenadas[j]-x_barra_j[j]));               
+    }
+    
+    for(i=0; i<SIZE; i=i+1)
+        s_barra_j[j]=sqrt(s_barra_j[j]/(Outros.size()-1));
+    
+    
+    // Faz a soma de todos e armazena os melhores no Heap
+    
+    for(i=0; i<Outros.size(); i=i+1) {
+        sum=0;
+        for(j=0; j<SIZE; j=j+1) {
+            zij=(coordenadas[j]-x_barra_j[j])/s_barra_j[j];
+            zkj=(Outros[i].coordenadas[j]-x_barra_j[j])/s_barra_j[j];
+            sum=sum+((zij-zkj)*(zij-zkj));
+        }   
+        sum=sqrt(sum);
+        //cout << "Distance(id=" << Outros[i].indice << ") -> " << sum << endl;
+        //heapzim.Attempt(sum, Outros[i].indice);
+        (* heapzim).Attempt(sum, Outros[i].indice);
+    }
+    
+    (* heapzim).OrderHash();
+    //(* heapzim).PrintHash();
 }
