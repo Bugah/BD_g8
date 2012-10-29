@@ -90,7 +90,7 @@
 	}
 
 	//Create INSERT query
-	$qry = "INSERT INTO Usuarios(Nome, Sobrenome, Login, Senha) VALUES('$fname','$lname','$login','".md5($_POST['password'])."')";
+	$qry = "INSERT INTO Usuarios(Nome, Sobrenome, Login, Senha) VALUES('$fname','$lname','$login','".md5($_POST['senha'])."')";
 	$result = @mysql_query($qry);
 	
 	//Check whether the query was successful or not
