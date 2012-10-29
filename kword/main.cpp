@@ -2,37 +2,61 @@
  * Title: Text.h --------------------------------------------------------------
  * Author: andre --------------------------------------------------------------
  * Created on: Oct 23, 2012 ---------------------------------------------------
- * Last Changed on: Oct 25, 2012 ----------------------------------------------
- * ----------------------------------------------------------------------------
- * ------------------------------------------------------------------------- */
+ * Last Changed on: Oct 28, 2012 ----------------------------------------------
+ * --------------------------------------------------------------------------*/
 
 #include "Text.h"
+#include <fstream>
 
-int main(void) {
-	Text text1, text2, text3, text4, text5;
+int main(int argc, char *argv[]) {
+	string buff, tmp1, tmp2;	ifstream fdicio, fdesc;
+	Text desc, dicio, trash;
 
-	text1 = "Temos que testar mais um dos metodos";
-	cout << text1.getTxt() << endl;
+	// Parametros: Prog | Arquivo de Descricao | Arquivo de Dicionario de Tags
+	if(argc != 3) {
+		cout << "Erro de Parametros! Por Favor digite o nome dos Arquivos" << endl;
+		getline(cin, tmp1);	getline(cin, tmp2);
+	}	else {
+		tmp1 = argv[1];	// Leu a descricao
+		tmp2 = argv[2];
+	}
 
-	text2 = text1.copy(0, 3);
-	cout << "Text between 0 and 3 (text1):" << endl;
-	cout << text2.getTxt() << endl;
-	cout << "Finish!" << endl << endl;
+	fdesc.open(tmp1.c_str());	// Abre o Arquivo de Descricao
 
-	text3 = text1.until("dos");
-	cout << "Text until the 'dos' word (text1) " << endl;
-	cout << text3.getTxt() << endl;
-	cout << "Finish!" << endl << endl;
+	// Transforma a descricao em objetos texto
+	if(fdesc.is_open()) {
+		getline(fdesc, tmp1);
+		buff = " ";	buff += tmp1;
+		while(!fdesc.eof())	{
+			desc += buff;
+			desc += " ";
+			getline(fdesc, buff);
+		}
+	} else {
+		cout << "Arquivo de Descricao nao Encontrado! Processo Abortado!" <<endl;
+		return -1;
+	}
 
-	text4 = text1.allWith('e');
-	cout << "Words with 'e' (text1) " << endl;
-	cout << text4.getTxt() << endl;
-	cout << "Finish!" << endl << endl;
+	desc.printTxt();
+	// Faz a Leitura do dicionario de tags
+	fdicio.open(tmp2.c_str());
 
-	text5 = text1.exceptWith('e');
-	cout << "Words without 'e' (text1) " << endl;
-	cout << text5.getTxt() << endl;
-	cout << "Finish!" << endl << endl;
+	// Transforma o dicionario em objetos texto
+	if(fdicio.is_open()) {
+		getline(fdicio, buff);
+		dicio = buff;
+	} else {
+		cout << "Arquivdo de Dicionario nao Encontrado! Processo Abortado!" << endl;
+		return -1;
+	}
 
+	// Agora retiramos todas as palavras que nao sao Tags
+	trash = desc-dicio;
+	trash.printTxt();
+
+	desc -= trash;
+
+	// Agora desc só tem as tags
+	desc.printTxt();
 	return 0;
 }

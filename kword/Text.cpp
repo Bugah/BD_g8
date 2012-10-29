@@ -9,7 +9,15 @@
 #include "Text.h"
 
 // Methods
-// Create - Initializes the Text Variable with some String
+// Add - Create a Text with the string and sums to the Text object
+void Text::add(string str) {
+	Text temp;
+	temp.create(str);
+	*this += temp;
+}
+
+/*---------------------------------------------------------------------------*/
+// Create - Initializes the Text Objects with some String
 void Text::create(string str) {
     string tmp(" "), peon;
     size_t first, last, size = 0;
@@ -21,16 +29,17 @@ void Text::create(string str) {
     // Put an empty space in the begin of the String
     tmp += str;
 
-    // Only consider the alphabet letters (any symbol beyond this is desconsider)
+    // Only consider the alphabet letters and numbers (any symbol beyond this is desconsider)
     first = tmp.find_first_not_of(alpha);
     while(first != string::npos) {
         last = tmp.find_first_not_of(alpha, ++first);
         peon = tmp.substr(first, (last-first));
+        first = last;
 
+        if(peon.empty())	continue;
         // 'peon' has the next word
         this->txt.push_back(peon);
         size++;
-        first = last;
     }
     // actualizes the size of the text
     this->size = size;
@@ -148,17 +157,16 @@ Text Text::operator+ (Text arg) {
 
 	temp = *this;
 	for(i=0; i<arg.size; i++) {
-		temp.add(arg.txt[i]);
+		temp.txt.push_back(arg.txt[i]);
 		temp.size++;
 	}
 	return temp;
 }
 
 Text Text::operator+ (string param) {
-	Text temp;
-	temp = *this;
-	temp.add(param);
-	return temp;
+	Text temp, aux;
+	temp = *this;	aux.create(param);
+	return temp+aux;
 }
 /*---------------------------------------------------------------------------*/
 // Operator -
@@ -167,11 +175,10 @@ Text Text::operator- (Text arg) {
 	string hold;
 
 	for(i=0; i<this->size; i++) {
-		hold = this->txt[i];
-		check = arg.find_first_of(hold);
-		if(check == string::npos)	temp.add(hold);
+		hold = this->txt[i];	// Take some word of *this
+		check = arg.find_first_of(hold);	// Check if it's on the args
+		if(check == string::npos)	temp.add(hold);	// It's not in the args
 	}
-	temp.size = this->size - arg.size;
 	return temp;
 }
 

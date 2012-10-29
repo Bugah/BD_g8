@@ -18,7 +18,7 @@
 using namespace std;
 
 // Alphabet definition
-const string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 /*---------------------------------------------------------------------------*/
 /* Class Definition */
@@ -31,7 +31,8 @@ private:
 public:
     // Methods
     void printTxt();	// Prints all the words on the text
-    void add(string str)	{this->size++;	this->txt.push_back(str);}
+    void add(string str);
+    size_t getSize()	{return this->size;}
 
     char getLetterAt(size_t i, int l)   {return this->txt[i].at(l);}
 /*---------------------------------------------------------------------------*/
