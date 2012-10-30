@@ -15,6 +15,7 @@
 <div class="center">
 <div id="upInfo" style="background-color:#FFFFAA;padding:5px;margin-right:10px;float:left;">
 <?php
+  	$nome = str_replace("jpeg", "jpg", $_FILES["file"]["name"]);
 $allowedExts = array("jpg", "jpeg", "gif", "png");
 $extension = end(explode(".", $_FILES["file"]["name"]));
 if ((($_FILES["file"]["type"] == "image/gif")
@@ -25,6 +26,7 @@ if ((($_FILES["file"]["type"] == "image/gif")
 && ($_FILES["file"]["size"] < 200000)
 && in_array($extension, $allowedExts))
   {
+
   if($_POST["titulo"]) {
   	// Validando a entrada. Evitando Injections com '.', ',', '/', '\', '|'
   	$carac = array(".",",","/","\\","|");						// caracteres ilegais
@@ -51,23 +53,23 @@ if ((($_FILES["file"]["type"] == "image/gif")
     echo "Localizado em: " . $_FILES["file"]["tmp_name"]. " <br /><br />";
     ?></i><?php
     }
-    if (file_exists("upload/" . $_FILES["file"]["name"]))
+    if (file_exists("upload/fmt/" . $_FILES["file"]["name"]))
       {
       echo $_FILES["file"]["name"] . " já existe. ";
       }
     else
       {
       move_uploaded_file($_FILES["file"]["tmp_name"],
-      "upload/" . $_FILES["file"]["name"]);
+      "upload/fmt/" . $_FILES["file"]["name"]);
       
 	  /******************************************************************************/
 	  // Criando o descritor de imagens no formato .info através do script criaInfo.sh
       error_reporting(E_ALL);
 
 		/* Add redirection so we can get stderr. */
-		echo '/bin/sh criaInfo.sh "'.$_REQUEST['desc']. '" "upload/' .substr($_FILES["file"]["name"], 0, -4). '" 2>&1';
+		echo '/bin/sh criaInfo.sh "'.$_REQUEST['desc']. '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" 2>&1';
 		//echo "<br />";
-		$handle = popen('/bin/sh criaInfo.sh "'.$_REQUEST['desc']. '" "upload/' .substr($_FILES["file"]["name"], 0, -4). '" 2>&1', 'r');
+		$handle = popen('/bin/sh criaInfo.sh "'.$_REQUEST['desc']. '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" ' . substr($_FILES["file"]["name"], 0, -4) . ' 2>&1', 'r');
 		//$handle = popen('/bin/pwd', 'r');
 		//echo "'$handle'; " . gettype($handle) . "\n";
 		//$read = fread($handle, 2096);
@@ -75,16 +77,16 @@ if ((($_FILES["file"]["type"] == "image/gif")
 		pclose($handle);
 	  /******************************************************************************/
 	  
-      echo "Local do arquivo: " . "upload/" . $_FILES["file"]["name"];
+      echo "Local do arquivo: " . "upload/fmt/" . $_FILES["file"]["name"];
       }
 	  ?>
 	 	<h2>Visualização da Imagem:</h2>
-		<img style="max-width:70%;" src="<?php echo "upload/".$_FILES["file"]["name"]; ?>" />
+		<img style="max-width:70%;" src="<?php echo "upload/fmt/".$_FILES["file"]["name"]; ?>" />
 		
 		<h2>Descrição da Imagem:</h2>
 		<?php
-		if(file_exists("upload/".substr($_FILES["file"]["name"], 0, -4).".info")) {
-			$lines = file("upload/".substr($_FILES["file"]["name"], 0, -4).".info");
+		if(file_exists("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".info")) {
+			$lines = file("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".info");
 		
 		// Loop through our array, show HTML source as HTML source; and line numbers too.
 			foreach ($lines as $line_num => $line) {

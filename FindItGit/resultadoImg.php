@@ -50,6 +50,7 @@ $conta = sizeof($_SESSION['img']);
 				}
 				//f = '"'+i+"px"+'"';
 				//alert(f);
+				$(this).find("img").css("padding-left", 0+"px");
 				$(this).find("img").css("max-height", i+"px");
 				$(this).find("img").css("max-width", i+"px");
 				$(this).find("img").css("max-width:hover", "100%");
@@ -120,7 +121,33 @@ foreach ($imagens as $img)
 					<?php echo $img; ?>
 				</div>
 			<!-- Colocando a imagem !-->
-			<a target="_blank" href= "<?php echo "builtIn/upload/fmt/" . $img . ".jpg"; ?>" > <img src="<?php echo "builtIn/upload/fmt/cmp/" . $img  . ".jpg"; ?>" alt="<?php echo $img; ?>"  /> </a>
+			<a target="_blank"" " " " href= "<?php echo "builtIn/mostraImagem.php?imgName=" . $img . ".jpg"; ?>" > <img alt="Imagem sem thumbnail" src=<?php echo "builtIn/upload/fmt/cmp/".$img.".jpg"; ?> alt="<?php echo $img; ?>"  /> </a>
+			<?php 
+				//echo $_SESSION['points'][$iNum-1] . "<br/>";
+				$calc = 200-200000*$_SESSION['points'][$iNum-1]*$_SESSION['points'][$iNum-1];
+				//echo $calc;
+				?>
+				<br />
+			<canvas id="canvas<?php echo $img; ?>" width="100" height="15" style="border:1px solid #c3c3c3;">
+			</canvas>
+			<script> //get a reference to the canvas
+				var ctx = $('#canvas<?php echo $img; ?>')[0].getContext("2d");
+				
+				var lingrad = ctx.createLinearGradient(0,0,100,15);
+    lingrad.addColorStop(0, '#EE0000');
+    lingrad.addColorStop(0.5, '#CCCC00');
+    lingrad.addColorStop(1, '#00AA00');
+				
+				// ctx.fillStyle = "#00A308";
+				ctx.fillStyle = lingrad;
+				//ctx.beginPath();
+				// ctx.arc(0, 0, 10, 0, Math.PI*2, true); 
+				// ctx.rect(0,0,<?php echo $calc; ?>,15);
+				ctx.fillRect(0,0,<?php echo $calc; ?>,15)
+				//ctx.closePath();
+				ctx.fill();
+			</script>
+			
 			</div>
 
 		<?php

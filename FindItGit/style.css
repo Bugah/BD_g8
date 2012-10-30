@@ -12,7 +12,7 @@
 .center2 {
 	margin-left: auto;
 	margin-right: auto;
-	width: 50%;
+	width: 60%;
 }
 
 /* para quebrar linha em div, usado na separação do resultado de imagens */
@@ -218,9 +218,30 @@ div.linha {
 div.linha:hover {
 	height: auto;
 	padding-left: 0px;
+	transition: padding-left 1s;
+	-moz-transition: padding-left 1s; /* Firefox 4 */
+	-webkit-transition: padding-left 1s; /* Safari and Chrome */
+	-o-transition: padding-left 1s; /* Opera */
 }
 
 .resultado {
 	text-decoration: blink;
 	color: blue;
+}
+
+p.destaque {
+	margin-left: auto;
+	margin-right: auto;
+	width:80%;
+	padding: 10px;
+	background: #C4C3C2;
+	border-radius: 15px;
+	opacity: 0.8;
+	font-weight: bold;
+}
+
+p.destaque span {
+	text-decoration: underline;
+	color: #123456;
+	font-variant: small-caps;
 }

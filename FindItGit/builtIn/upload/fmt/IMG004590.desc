@@ -1,0 +1,35 @@
+Twitter VFD Display
+Built a display for Twitter messages using a used VFD cashier display, an Arduino board and Flash.
+
+The arduino-side code is very basic:
+
+#include 
+#define rxPin 2
+#define txPin 3
+
+// set up a new serial port
+SoftwareSerial mySerial =  SoftwareSerial(rxPin, txPin);
+
+
+void setup()  {
+  // define pin modes for tx, rx, led pins:
+  pinMode(rxPin, INPUT);
+  pinMode(txPin, OUTPUT);
+  
+  // set the data rate for the SoftwareSerial port
+  Serial.begin(4800);
+  
+  mySerial.begin(9600);
+  
+  mySerial.print(0x10,BYTE);
+   mySerial.print(0x14,BYTE);
+   mySerial.print(0x0c,BYTE);
+   
+}
+
+void loop() {
+   if ( Serial.available() &gt; 0 ) mySerial.print(Serial.read(), BYTE);
+}
+
+
+
