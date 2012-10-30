@@ -1,0 +1,8 @@
+Language communities of Twitter (European detail)
+I had been wanting to make this for a while before finding out on Saturday that <a href="http://blog.mikemccandless.com/2011/10/language-detection-with-googles-compact.html" rel="nofollow">Mike McCandless had extracted Chrome's open-source language detector</a> into a standalone library, which suddenly made it much more practical.
+
+There are a lot of near-identical colors for different languages because I was optimizing for maximum distinguishability of languages used near each other rather than for global uniqueness.  The exception is English, which is in gray because it is so common almost everywhere that it threw off the process of choosing the other colors.
+
+<a href="http://flowingdata.com/2011/10/27/language-communities-of-twitter/" rel="nofollow">Nathan pointed out</a> an error in the language labels.  Fixed now.
+
+Data from the Twitter streaming API, May 14-October 20, 2011.

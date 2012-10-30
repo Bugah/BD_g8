@@ -32,7 +32,7 @@ $extension = end(explode(".", $_FILES["file"]["name"]));
 && in_array($extension, $allowedExts))
  * */
 
-if ($_FILES["file"]["type"])
+if ($_FILES["file"]["type"] && in_array($extension, $allowedExts))
   {
 
 	// Se ocorrer erro no upload  	
@@ -41,6 +41,24 @@ if ($_FILES["file"]["type"])
     		// Erro de tipo de entrada
     echo "Erro: " . $_FILES["file"]["error"] . "<br />";
     }
+	
+  if($extension!="jpg") {
+  	echo "Aviso: imagem convertida para formato correto! <br />";
+	   /******************************************************************************/
+	  // Criando o descritor normalizado de imagens no formato .nor através do script normaliza.sh
+      error_reporting(E_ALL);
+		/* Add redirection so we can get stderr. */
+		// echo '/bin/sh tmp/normaliza.sh '.substr($_FILES["file"]["name"], 0, -4). ' tmp/ 2>&1';
+		// echo "<br />";
+		$handle = popen('/bin/sh upload/toJPG.sh '. $_FILES["file"]["name"] . ' tmp/' . substr($_FILES["file"]["name"], 0, -4) . ' 2>&1', 'r');
+		//$handle = popen('/bin/pwd', 'r');
+		// echo "'$handle'; " . gettype($handle) . "\n";
+		// $read = fread($handle, 2096);
+		// echo $read;
+		pclose($handle);
+		$_FILES["file"]["name"] = substr($_FILES["file"]["name"], 0, -4).".jpg";
+	  /******************************************************************************/
+  }
     $_FILES["file"]["name"] = str_replace(" ", "_", $_FILES["file"]["name"]);
       move_uploaded_file($_FILES["file"]["tmp_name"],
       "tmp/" . $_FILES["file"]["name"]);
@@ -68,22 +86,33 @@ if ($_FILES["file"]["type"])
       error_reporting(E_ALL);
 		/* Add redirection so we can get stderr. */
 		$cmd = 'tmp/tools/BruteForceDist/BruteForceDist tmp/'.substr($_FILES["file"]["name"], 0, -4). '.nor tmp/tools/BruteForceDist/1.nor 2>&1';
-		 echo "<br />";
-		 echo $cmd;
-		 echo "<br />";
+		// echo "<br />";
+		// echo $cmd;
+		// echo "<br />";
 		//$handle = popen($cmd, 'r');
 		//passthru($cmd, $test);
 		
 		/* Executa o comando e retorna a saída para $test */
 		exec($cmd,$test);
 		//print_r($test);
-		for($i=0;$i<20;$i++) {
-			$string[$i] = "IMG".reset(explode(" : ", $test[$i+1]));
+		$imgName = array();
+		$imgPoints = array();
+		$i=0;
+		//for($i=0;$i<20;$i++) {
+			while(reset(explode(" : ", $test[$i+1]))) {
+				
+			// Parsing da saída do calculador
+			$dois = end(explode(" : ", $test[$i+1]));
+			$tmp = reset(explode(" : ", $test[$i+1]));
+			$imgName[$i] = "IMG".$tmp;
+			$imgPoints[$i] = $dois;
+$i++;
 			//echo ", ";
 			//print($string[$i]);
 		}
 		
-		$_SESSION['img'] = $string;
+		$_SESSION['img'] = $imgName;
+		$_SESSION['points'] = $imgPoints;
 		
 		//$handle = popen('/bin/pwd', 'r');
 		//echo "'$handle'; " . gettype($handle) . "\n";

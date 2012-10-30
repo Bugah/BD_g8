@@ -1,0 +1,19 @@
+M78 for ESO Processing contest. WFI camera on 2.2m telescope
+M78 nebular complex in Orion
+
+La Silla 2.2m MPG/ESO telescope, Cassegrain focus (F=8009mm).
+
+5x3min Red, 3x3min Green (V), 3x3min Blue(B)
+
+FWHM = 1.4&quot;
+
+Camera: WFI 8k x 8k mosaic CCD.
+
+Image was calibrated, and Stacked from RAW data via IRAF software, composed/ white-balanced in Iris, and post-processed in PhotoShop.
+
+Post processing was made in 50% scale (4228x4114) because image was quite oversampled (nothing to lose in 50% scale) and my PC is terrible weak for 67Mpix 16-bit image's multi-layered photoshoping :-)
+
+This is a sample in ~12% resolution. 
+<a href="http://www.fireplant.com/eso/M78WFI_R5x3min_G3x3min_B3x3min_size50.jpg" rel="nofollow">Large version is here (50% of original FITS, 12Mb)</a>
+
+(C) ESO/Igor Chekalin
