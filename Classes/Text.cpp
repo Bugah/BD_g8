@@ -2,7 +2,7 @@
  * Title: Text.h --------------------------------------------------------------
  * Author: andre --------------------------------------------------------------
  * Created on: Oct 23, 2012 ---------------------------------------------------
- * Last Changed on: Oct 28, 2012 ----------------------------------------------
+ * Last Changed on: Oct 25, 2012 ----------------------------------------------
  * ----------------------------------------------------------------------------
  * ------------------------------------------------------------------------- */
 
@@ -22,10 +22,8 @@ void Text::create(string str) {
     string tmp(" "), peon;
     size_t first, last, size = 0;
 
-    if(str.size() == 0)	{
-    	this->size = 0;
-    	return;
-    }
+    if(str.size() == 0)	return;
+
     // Put an empty space in the begin of the String
     tmp += str;
 
@@ -41,15 +39,13 @@ void Text::create(string str) {
         this->txt.push_back(peon);
         size++;
     }
-    // actualizes the size of the text
-    this->size = size;
 }
 /*---------------------------------------------------------------------------*/
 // First Version //
 /* Find First Of - returns the position of the first 'word'
  * occurrence from the 'i' position */
 size_t Text::find_first_of(string word, size_t i) {
-	for(; i<this->size; i++) {
+	for(; i<this->txt.size(); i++) {
 		if(this->txt[i] == word)	return i;
 	}
 	return string::npos;
@@ -124,7 +120,7 @@ Text Text::allWith(char letter) {
 	Text temp;	size_t i;
 	string str;
 
-	for (i=0; i<this->size; i++) {
+	for (i=0; i<this->txt.size(); i++) {
 		str = this->txt[i];
 		if(str.find(letter, 0) != string::npos)	temp += str;
 		else continue;
@@ -143,23 +139,13 @@ Text Text::exceptWith(char letter) {
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
-
-// Overwrites
-// Operator =
-void Text::operator= (Text param) {
-	this->txt = param.txt;
-	this->size = param.size;
-}
-/*---------------------------------------------------------------------------*/
+// Overwrite
 // Operator +
 Text Text::operator+ (Text arg) {
 	Text temp;	size_t i;
 
 	temp = *this;
-	for(i=0; i<arg.size; i++) {
-		temp.txt.push_back(arg.txt[i]);
-		temp.size++;
-	}
+	for(i=0; i<arg.txt.size(); i++)	temp.txt.push_back(arg.txt[i]);
 	return temp;
 }
 
@@ -174,7 +160,7 @@ Text Text::operator- (Text arg) {
 	Text temp;	size_t i, check;
 	string hold;
 
-	for(i=0; i<this->size; i++) {
+	for(i=0; i<this->txt.size(); i++) {
 		hold = this->txt[i];	// Take some word of *this
 		check = arg.find_first_of(hold);	// Check if it's on the args
 		if(check == string::npos)	temp.add(hold);	// It's not in the args
@@ -188,3 +174,9 @@ Text Text::operator- (string param) {
 	return (*this-temp);
 }
 /*---------------------------------------------------------------------------*/
+// Operator <<
+std::ostream& operator<<(std::ostream& output, const Text& obj) {
+	size_t i;
+	for(i=0; i<obj.txt.size(); i++) output << obj.txt[i].c_str() << endl;
+	return output;
+}

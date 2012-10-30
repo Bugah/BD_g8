@@ -25,14 +25,14 @@ const string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345
 class Text {
 private:
     vector<string> txt; // Vector with all the words
-    size_t size;        // Vector size
 
     void create(string);	// Creates a Text Object
+    void add(string str);
 public:
     // Methods
     void printTxt();	// Prints all the words on the text
-    void add(string str);
-    size_t getSize()	{return this->size;}
+
+    size_t getSize() {return this->txt.size();}	// Getter
 
     char getLetterAt(size_t i, int l)   {return this->txt[i].at(l);}
 /*---------------------------------------------------------------------------*/
@@ -51,10 +51,10 @@ public:
 
     // Constructor
     Text(string str) {create(str);}
-    Text() {this->size=0;};
+    Text() {};
 
     // Overwriting operator
-    void operator= (Text);
+    void operator= (Text param) {this->txt = param.txt;}
     void operator= (string param) {this->create(param);}
     void operator+= (Text param) {*this = *this + param;}
     void operator+= (string param) {*this = *this + param;}
@@ -64,6 +64,9 @@ public:
     Text operator+ (string);
     Text operator- (Text);
     Text operator- (string);
+
+    // Friend Definition
+    friend ostream& operator<<(ostream& output, const Text& obj);
 
 };
 #endif /* TEXT_H_ */
