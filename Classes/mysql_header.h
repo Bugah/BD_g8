@@ -33,8 +33,8 @@
 
 /*  Mococa Hash V2	*/
 
-#define limite1 0.028
-#define limite2 0.061	// limite1 + RAIOMAX
+//#define limite1 0.028
+//#define limite2 0.061	// limite1 + RAIOMAX
  
 // Coloquei um valor privisório.
 

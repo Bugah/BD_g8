@@ -43,8 +43,11 @@
 
 /* Funções */
 
-void reload();
-void compute(const char * norpath, KMaxHeap * Heapzim);
+// No reloadv2/computev2, os desvios padroes e as medias tambem sao pre calculadas.
+//void reload();
+void reloadv2();
+//void compute(const char * norpath, KMaxHeap * Heapzim);
+void computev2(const char * norpath, KMaxHeap * Heapzim);
 
 
 /* Namespaces */
@@ -62,10 +65,11 @@ sql::Connection *con;
 sql::PreparedStatement *pstmt;
 sql::ResultSet *res;
 
+/* Variaveis Globais de cache! */
 vector <Vetorzao> cache_ci;
-//KMaxHeap Heapzim;
+double x_barra_j[SIZE];
+double s_barra_j[SIZE];
 
-char tryme='a';
 
 int main(int argc, char *argv[]) {
     int       list_s;                /*  listening socket          */
@@ -75,11 +79,9 @@ int main(int argc, char *argv[]) {
     char      buffer[MAX_LINE];      /*  character buffer          */
     
     char      buffer_t[MAX_LINE];
-    
     char     *endptr;                /*  for strtol()              */
 
-    
-    string time;
+    int counter=0;
 
     /*  Get port number from the command line, and
         set to default port if no arguments were supplied  */
@@ -87,24 +89,24 @@ int main(int argc, char *argv[]) {
     if ( argc == 2 ) {
 	port = strtol(argv[1], &endptr, 0);
 	if ( *endptr ) {
-	    fprintf(stderr, "ECHOSERV: Invalid port number.\n");
-	    exit(EXIT_FAILURE);
+	    cout << "Server: Invalid port number" << endl;
+	    return -1;
 	}
     }
     else if ( argc < 2 ) {
 	port = ECHO_PORT;
     }
     else {
-	fprintf(stderr, "ECHOSERV: Invalid arguments.\n");
-	exit(EXIT_FAILURE);
+	cout << "Server: Invalid arguments" << endl;
+	return -1;
     }
 
 	
     /*  Create the listening socket  */
 
     if ( (list_s = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
-	fprintf(stderr, "ECHOSERV: Error creating listening socket.\n");
-	exit(EXIT_FAILURE);
+	cout <<  "Server: Error creating listening socket." << endl;
+	return -1;
     }
 
 
@@ -121,17 +123,17 @@ int main(int argc, char *argv[]) {
 	listening socket, and call listen()  */
 
     if ( bind(list_s, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0 ) {
-	fprintf(stderr, "ECHOSERV: Error calling bind()\n");
-	exit(EXIT_FAILURE);
+	cout << "Server: Error calling bind()" << endl;
+	return -1;
     }
 
     if ( listen(list_s, LISTENQ) < 0 ) {
-	fprintf(stderr, "ECHOSERV: Error calling listen()\n");
-	exit(EXIT_FAILURE);
+	cout << "ECHOSERV: Error calling listen()" << endl;
+	return -1;
     }
 
     
-    reload();   // [Re]Carregamento Inicial
+    reloadv2();   // [Re]Carregamento Inicial
     
     /*  Enter an infinite loop to respond
         to client requests and echo input  */
@@ -139,12 +141,11 @@ int main(int argc, char *argv[]) {
     while ( 1 ) {
         
         KMaxHeap * heap_p;              // Heap!
-
 	/*  Wait for a connection, then accept() it  */
 
 	if ( (conn_s = accept(list_s, NULL, NULL) ) < 0 ) {
-	    fprintf(stderr, "ECHOSERV: Error calling accept()\n");
-	    exit(EXIT_FAILURE);
+	    cout <<  "Server: Error calling accept()" << endl;
+	    return -1;
 	}
 
 	/*  Retrieve an input line from the connected socket
@@ -158,9 +159,9 @@ int main(int argc, char *argv[]) {
         if(buffer[0]!='0') {
         
             heap_p = new KMaxHeap[1];       // Cria Heap
-            compute(buffer, heap_p);        // Computa
+            computev2(buffer, heap_p);        // Computa
 
-            (* heap_p).PrintHash();         // Imprimi Resultados
+            //(* heap_p).PrintHash();         // Imprimi Resultados
             (* heap_p).Make_Answer(buffer); // Cria resposta (Burocracia)
 
             Writeline(conn_s, buffer, strlen(buffer));      // Devolve Resposta
@@ -170,19 +171,20 @@ int main(int argc, char *argv[]) {
         }
         
         else {
-            reload();
+            reloadv2();
         }
 
 	if ( close(conn_s) < 0 ) {
-	    fprintf(stderr, "ECHOSERV: Error calling close()\n");
-	    exit(EXIT_FAILURE);
+	    cout << "Server: Error calling close()" << endl;
+	    return -1;
 	}
+        cout << "Atendido #" << ++counter << "Pedido << endl;
     }
 }
 
 
 /* Funcão que efetua toda leitura e guarda no vector cache_si : Rodada apenas no início e quando houver update */
-void reload() {
+/* void reload() {
     string initial;
     int indice;
     Vetorzao Vet_t;
@@ -208,9 +210,71 @@ void reload() {
     } 
     
     return;
+} */
+
+
+void reloadv2() {
+    string initial;
+    int indice;
+    Vetorzao Vet_t;
+    int i;
+    int j;
+    
+    driver =sql::mysql::get_driver_instance();
+    con = driver->connect(DBHOST, USER, PASSWORD);
+    con->setSchema(DATABASE);
+    
+    pstmt = con->prepareStatement(command);
+    res = pstmt->executeQuery();
+    
+    cache_ci.clear();
+    
+    int term=0;
+    
+    while (res->next()) {
+        initial = res->getString("Coord");
+        indice = res->getInt("Id");
+        Vet_t.reset(initial, indice);
+        cache_ci.push_back(Vet_t);
+        term=term+1;
+    }
+    
+    cout << "Carregou Vetores." << endl;
+    
+    
+    for(i=0; i<SIZE; i=i+1) {
+        x_barra_j[i]=0;
+        s_barra_j[i]=0;
+    }   
+    
+    // Obtem a media
+    
+    for(i=0; i<cache_ci.size(); i=i+1) {
+        for(j=0; j<SIZE; j=j+1) 
+            x_barra_j[j]=x_barra_j[j]+cache_ci[i].coordenadas[j];               
+    }
+    
+    for(i=0; i<SIZE; i=i+1)
+            x_barra_j[i]=x_barra_j[i]/1000;
+    
+        
+    // Obtem o desvio padrao
+   
+    for(i=0; i<cache_ci.size(); i=i+1) {
+        for(j=0; j<SIZE; j=j+1) 
+            s_barra_j[j]=s_barra_j[j]+((cache_ci[i].coordenadas[j]-x_barra_j[j])*(cache_ci[i].coordenadas[j]-x_barra_j[j]));               
+    }
+    
+    for(j=0; j<SIZE; j=j+1)
+        s_barra_j[j]=sqrt(s_barra_j[j]/(cache_ci.size()-1));
+    
+    cout << "Calculou Médias e Desvio Padrões." << endl;
+    
+    return;
 }
 
-void compute(const char * norpath, KMaxHeap * Heapzim) {
+
+/*void compute(const char * norpath, KMaxHeap * Heapzim) {
     Vetorzao answer;
 
     string correct;
@@ -223,4 +287,20 @@ void compute(const char * norpath, KMaxHeap * Heapzim) {
     answer.resetNor(correct.c_str());
     
     answer.normalized_Euclidean_distance(cache_ci, Heapzim);
-}
+}*/
+
+
+void computev2(const char * norpath, KMaxHeap * Heapzim) {
+    Vetorzao answer;
+
+    string correct;
+    
+    correct.clear();
+    correct.append(norpath);
+    
+    correct.resize(correct.size()-1);   // Tira o \n
+    
+    answer.resetNor(correct.c_str());
+    
+    answer.normalized_Euclidean_distance(cache_ci, Heapzim, x_barra_j, s_barra_j);
+} 

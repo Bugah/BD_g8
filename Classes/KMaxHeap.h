@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 using namespace std;
 
@@ -36,6 +37,7 @@ public:
     void OrderHash();                           // Ordena o hash : Heapsort
     void PrintHash();                           // Imprimi do 1 ate o 20
     double GetHigher();
+    void Make_Answer(char answer[] );
 };
 
 #endif	/* KMAXHASH_H */

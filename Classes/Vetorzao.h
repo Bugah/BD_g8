@@ -30,8 +30,9 @@ class Vetorzao {
             double compararDistancia(Vetorzao Outro);
             double compararDistancia(Vetorzao Outro, double Max);
             Vetorzao();
-            double normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHeap * heapzim);
             void distribution();
+            double normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHeap * heapzim);
+            double normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHeap * heapzim, double * x_barra_j, double * s_barra_j);
 };
 
-#endif	/* VETORZAO_H */
+#endif	/* VETORZAO_H */        

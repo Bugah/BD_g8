@@ -20,10 +20,6 @@ KMaxHeap::KMaxHeap() {
     index[K_HASH_B]=-1;
 }
 
-void KMaxHeap::Clear() {
-    KMaxHeap();
-}
-
 void KMaxHeap::Attempt(double dist, int indice) {
     if(valores[1]>dist) {               // Se for menor que o maximo
         valores[1]=dist;                // ponto de interesse, trocar

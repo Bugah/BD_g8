@@ -122,7 +122,7 @@ void KMaxHeap::PrintHash() {            // Apenas imprimi os indices e valores
     cout << endl;
     cout.fill('0');
         for(i=1; i<K_HASH_B; i=i+1) {
-		if(index[i]!=-1)
+		//if(index[i]!=-1)
 			cout << setw(6) << index[i] << " : " << valores[i] << " " << endl;
         }   
     cout << endl;
@@ -132,4 +132,45 @@ void KMaxHeap::PrintHash() {            // Apenas imprimi os indices e valores
 
 double KMaxHeap::GetHigher() {
     return valores[1];
+}
+
+
+// Answer é um char[] de tamanho 1000; Heapzim é o Heap com as respostas
+void KMaxHeap::Make_Answer(char answer[] ) {
+    int i;
+    string str;
+    
+    for(i=1; i<K_HASH_B; i=i+1) {
+        if(index[i]<10)
+            str.append("00000");
+        else if(index[i]<100) 
+            str.append("0000");
+        else if(index[i]<1000)
+            str.append("000");
+        else if(index[i]<10000) 
+            str.append("00");
+        else
+            str.append("0");
+        
+        stringstream s;
+        s << index[i] ;
+        str.append(s.str());
+        str.append(" : ");
+        ostringstream s2;
+        
+        if(valores[i]==0) {
+            str.append("0.000000 ");
+        }
+        else {        
+            s2 << setw(6) << valores[i];
+            str.append(s2.str());
+            str.append(" "); 
+        }
+    }
+    
+    for(i=0; i<str.size(); i=i+1) {
+        answer[i]=str[i];
+    }
+    
+    return;
 }

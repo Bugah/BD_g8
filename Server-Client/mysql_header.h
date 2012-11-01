@@ -68,6 +68,3 @@ const char* ncol[][23] = {
 
 /* Formato dos arquivos esperados */
 const char* tags = ".tags";
-
-const double limite1 = 0.053;
-const double limite2 = 0.086;

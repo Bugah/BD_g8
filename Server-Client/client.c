@@ -12,7 +12,6 @@
 
 */
 
-
 #include <sys/socket.h>       /*  socket definitions        */
 #include <sys/types.h>        /*  socket types              */
 #include <arpa/inet.h>        /*  inet (3) funtions         */
@@ -25,12 +24,9 @@
 #include <stdio.h>
 
 
-#include <time.h>
-
 /*  Global constants  */
 
 #define MAX_LINE           (360)
-
 
 /*  Function declarations  */
 
@@ -43,10 +39,6 @@ double diffclock(clock_t clock1, clock_t clock2);
 int main(int argc, char *argv[]) {
     /* Auxiliares */
     int i;
-    clock_t clock1;
-    clock_t clock2;
-    
-    clock1=clock();
     
     int       conn_s;                /*  connection socket         */
     short int port;                  /*  port number               */
@@ -58,24 +50,22 @@ int main(int argc, char *argv[]) {
 
 
     /*  Get command line arguments  */
-
     ParseCmdLine(argc, argv, &szAddress, &szPort);
 
 
     /*  Set the remote port  */
-
     port = strtol(szPort, &endptr, 0);
     if ( *endptr ) {
-	printf("ECHOCLNT: Invalid port supplied.\n");
-	exit(EXIT_FAILURE);
+	printf("Client: Invalid port supplied.\n");
+        return -1;
     }
 	
 
     /*  Create the listening socket  */
 
     if ( (conn_s = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
-	fprintf(stderr, "ECHOCLNT: Error creating listening socket.\n");
-	exit(EXIT_FAILURE);
+	printf("Client: Error creating listening socket.\n");
+	return -1;
     }
 
 
@@ -90,38 +80,39 @@ int main(int argc, char *argv[]) {
     /*  Set the remote IP address  */
 
     if ( inet_aton(szAddress, &servaddr.sin_addr) <= 0 ) {
-	printf("ECHOCLNT: Invalid remote IP address.\n");
-	exit(EXIT_FAILURE);
+	printf("Client: Invalid remote IP address.\n");
+	return -1;
     }
 
     
     /*  connect() to the remote echo server  */
 
     if ( connect(conn_s, (struct sockaddr *) &servaddr, sizeof(servaddr) ) < 0 ) {
-	printf("ECHOCLNT: Error calling connect()\n");
-	exit(EXIT_FAILURE);
+	printf("Client: Error calling connect()\n");
+	return -1;
     }
 
-    /*  Manda arquivo .nor desejado para o servidor */
-
-    //Writeline(conn_s, argv[5], strlen(argv[5]));
     
-    /* Copia arg[5] pro Buffer */
+    /* Coloca argumento 5 no Buffer */
     
     for(i=0; i<strlen(argv[5]); i=i+1) {
         buffer[i]=argv[5][i];
     }
     buffer[i]='\n';
     
+    /* Manda informação para o servidor */
+    
     Writeline(conn_s, buffer, strlen(buffer));
     
+    /* Se não for comando de reload, pega resposta */
     if(argv[5][0]!='0') {
     
         Readline(conn_s, buffer, MAX_LINE-1);
 
-        char * pch;
+        char * pch;     /* Tokeniza pra interface do Gallo */
         pch = strtok (buffer," ");
 
+        /* Imprimi as 20 respostas */
         for(i=0;i<20;i=i+1) {
 
             printf ("%s ",pch);
@@ -132,11 +123,6 @@ int main(int argc, char *argv[]) {
             pch = strtok (NULL," ");
         }
     }
-    
-    clock2 = clock();
-    double ts = diffclock(clock1, clock2);
-    printf("Time Spent: %f\n", ts );
-    /*  Output echoed string  */
 
     return 0;
 }
@@ -162,12 +148,4 @@ int ParseCmdLine(int argc, char *argv[], char **szAddress, char **szPort) {
     }
 
     return 0;
-}
-
-double diffclock(clock_t clock1, clock_t clock2) // Calcular diferenca de tempo
-{
-    clock2=clock();
-    double diffticks=clock2-clock1;
-    double diffms=(diffticks*1000)/CLOCKS_PER_SEC;
-    return diffms;
 }

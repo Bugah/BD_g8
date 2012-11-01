@@ -38,7 +38,6 @@ public:
     void PrintHash();                           // Imprimi do 1 ate o 20
     double GetHigher();
     void Make_Answer(char answer[] );
-    void Clear();
 };
 
 #endif	/* KMAXHASH_H */

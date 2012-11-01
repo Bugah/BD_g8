@@ -154,7 +154,7 @@ double Vetorzao::normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHea
             s_barra_j[j]=s_barra_j[j]+((Outros[i].coordenadas[j]-x_barra_j[j])*(Outros[i].coordenadas[j]-x_barra_j[j]));               
     }
     
-    for(i=0; i<SIZE; i=i+1)
+    for(j=0; j<SIZE; j=j+1)
         s_barra_j[j]=sqrt(s_barra_j[j]/(Outros.size()-1));
     
     
@@ -175,4 +175,31 @@ double Vetorzao::normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHea
     
     (* heapzim).OrderHash();
     (* heapzim).PrintHash();
+}
+
+
+// Calcula todas as Distancias Euclidianas Normalizadas, devolve resultado no heap
+double Vetorzao::normalized_Euclidean_distance(vector <Vetorzao> Outros, KMaxHeap * heapzim, double * x_barra_j, double * s_barra_j) {
+    double zij;
+    double zkj;
+    double sum=0;
+    
+    int i;
+    int j;
+       
+    // Faz a soma de todos e armazena os melhores no Heap
+    
+    for(i=0; i<Outros.size(); i=i+1) {
+        sum=0;
+        for(j=0; j<SIZE; j=j+1) {
+            zij=(coordenadas[j]-x_barra_j[j])/s_barra_j[j];
+            zkj=(Outros[i].coordenadas[j]-x_barra_j[j])/s_barra_j[j];
+            sum=sum+((zij-zkj)*(zij-zkj));
+        }   
+        sum=sqrt(sum);
+        (* heapzim).Attempt(sum, Outros[i].indice);
+    }
+    
+    (* heapzim).OrderHash();
+    //(* heapzim).PrintHash();
 }
