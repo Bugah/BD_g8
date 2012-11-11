@@ -30,7 +30,7 @@ int main(int argc, char * argv[]) {
 
 	// Arquivos de Entrada e Saida
 	ifstream infile; // Arquivo com dicionario de Tags
-	ofstream outfile("Results.txt"); // Impressao de Resultados
+	//ofstream outfile("Results.txt"); // Impressao de Resultados
 
 	/* Objetos MySQL */
 	sql::mysql::MySQL_Driver * driver;
