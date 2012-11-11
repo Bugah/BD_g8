@@ -55,7 +55,7 @@ public:
 
     // Overwriting operator
     void operator= (Text param) {this->txt = param.txt;}
-    void operator= (string param) {this->create(param);}
+    void operator= (string);
     void operator+= (Text param) {*this = *this + param;}
     void operator+= (string param) {*this = *this + param;}
     void operator-= (Text param) {*this = *this - param;}

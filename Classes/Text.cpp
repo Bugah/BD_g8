@@ -140,6 +140,13 @@ Text Text::exceptWith(char letter) {
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 // Overwrite
+// Operator =
+void Text::operator= (string param) {
+	Text tmp;
+	tmp.create(param);
+	*this = tmp;
+}
+/*---------------------------------------------------------------------------*/
 // Operator +
 Text Text::operator+ (Text arg) {
 	Text temp;	size_t i;
