@@ -2,7 +2,7 @@
  * Title: Text.h --------------------------------------------------------------
  * Author: andre --------------------------------------------------------------
  * Created on: Oct 23, 2012 ---------------------------------------------------
- * Last Changed on: Oct 25, 2012 ----------------------------------------------
+ * Last Changed on: Nov 11, 2012 ----------------------------------------------
  * ----------------------------------------------------------------------------
  * ------------------------------------------------------------------------- */
 
@@ -10,11 +10,11 @@
 #define TEXT_H_
 
 #include <iostream>
-
-/* String */
 #include <string>
 #include <vector>
 #include <cctype>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 // Alphabet definition
@@ -48,6 +48,7 @@ public:
     Text until(size_t);     // All words until "ind" one
     Text allWith(char);   // All words with alpha char
     Text exceptWith(char);      // All words without alpha char
+    Text random(size_t);	// Random chooses 'size_t' words
 
     // Constructor
     Text(string str) {create(str);}
