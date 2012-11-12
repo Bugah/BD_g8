@@ -155,7 +155,9 @@ void sqlCMD(string *arg1, Text arg2, Text arg3) {
 		arg1->append(" LIKE ");
 		arg1->append(1, '"');
 		arg1->append(1, '%');
+		arg1->append(" ");
 		arg1->append(arg2.getIWord(i));
+		arg1->append(" ");
 		arg1->append(1, '%');
 		arg1->append(1, '"');
 
