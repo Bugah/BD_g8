@@ -4,6 +4,9 @@
 ls *.jpg > lista.txt
 i=0
 
+# Cria o diretório dos thumbnails
+mkdir cmp
+
 for line in $(cat lista.txt);
 do
 	if [ `expr $i % 100` -eq 0 ]
@@ -11,5 +14,5 @@ do
 		echo -ne "|" 
 	fi
 	i=`expr $i + 1`;
-	convert $line -compress JPEG2000 -quality 75 -thumbnail 550\> cmp/$line ;
+	convert $line -compress JPEG2000 -quality 75 -thumbnail 360\> cmp/$line ;
 done
