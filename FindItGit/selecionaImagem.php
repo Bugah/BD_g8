@@ -12,11 +12,26 @@ acionaTempo();
 	</style>
 	<script src="scripts/ajaxImageUploader/ajaximage/scripts/jquery.form.js"></script>
 	<script>
+			
+			function confereImg(w,x) {
+				if(w.value) {
+					document.getElementById("submeter").disabled=false;
+				}
+			}
+			
+			function valida() {
+				if(document.getElementById("file").value) {
+					document.getElementById("submeter").disabled=false;
+					document.getElementById("htmlForm").submit();
+				}
+				return false;
+			}
+			
+		function loading() {
+			// $('#loading').html('<p>owowo<img src="../imagens/ajax-loader.gif" width="220" height="19" /></p>');
+			$('#loading').css("display","block");
+		}
 		$(document).ready(function() {
-			$("#showRes").click(function() {
-				alert("pegou!");
-				$("#resultado").load("resultadoImg.php");
-			});
 			
 			$('#htmlForm').ajaxForm({ 
 	        // target identifies the element(s) to update with the server response 
@@ -25,18 +40,13 @@ acionaTempo();
 	        // success identifies the function to invoke when the server response 
 	        // has been received; here we apply a fade-in effect to the new content 
 	        success: function() { 
+	        	
 	            	$('#loader').fadeIn('slow'); 
 		        } 
 		    });
 		    
 			$("li").click(function() {
 				$(this).css("border-style","inset");
-			});
-			$("#upload").click(function() {
-				var x = $('#file').val();
-				$("#loader").load("comparador.php?"+x+" #tst");
-				alert("oi");
-				alert($('#file').val());
 			});
 			
 		});
@@ -56,19 +66,28 @@ if (isset($_REQUEST['buscaTipo'])) {
 }
 ?>
 
-<h1 style="color:#BB8855;">Busca por imagens semelhantes</h1>
+<h1 style="color:#999955;text-shadow: #DDD 5px 5px 2px;text-transform: uppercase;">Busca por imagens semelhantes</h1>
 
 <!-- Formulário para receber aquisições !-->
-<form id="htmlForm" class="center" action="builtIn/comparador.php" method="post" enctype="multipart/form-data">
+<form id="htmlForm" class="centerTxt" action="builtIn/comparador.php" method="post" enctype="multipart/form-data">
 	<p>
 	<label for="file">Coloque o arquivo aqui:</label>
 	<input type="file" id="file" name="file" size="50" maxlength="100000" accept="image/*" onchange="confereImg(this)"/>
 	<input type="hidden" name="busca" id="busca" value="busca"/>
 	<input type="hidden" name="wow" id="wow" value="haha"/>
 	
-	<input type="submit" id="submissao" value="Buscar"/>
+	<input type="submit" id="submeter" disabled="disabled" value="Buscar" onclick="loading();"/>
 	</p>
 </form>
+
+<div id="loading" style="display: none;">
+	<div class="center2">
+		<h2>Aguarde, buscando imagens...&nbsp;<img class="centerTxt" src="imagens/ajax-loader.gif" width="220" height="19" /></h2>
+		
+		<img src="imagens/loading5.gif" height="400px" />
+		
+	</div>
+</div>
 
 <div id="loader">
 </div>

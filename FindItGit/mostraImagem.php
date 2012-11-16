@@ -23,7 +23,7 @@ $filename = "upload/fmt/".substr($_REQUEST['imgName'],0,-4);
 	</script>
 </head>
 <body style="background: black;">
-	<div class=barraLateral>
+	<div style="width:50px;display:inline;float:right;right=0;">
 		<button style="float:right;color:red;font-weight:bold;display:block;" onclick="window.close();">X</button>
 		<button style="float:right;right=0;" onclick="window.location='..'"><img  src="../imagens/secLogo.png" height="70px" /></button>
 		

@@ -11,11 +11,18 @@
 	<meta name="GENERATOR" content="PHPEclipse 1.2.0" />
 </head>
 <body>
-
-
+	
+<!-- Removendo o carregador da página	 -->
+	<script>
+		// document.getElementById("loading").innerHTML = "";
+		// document.getElementById("loading").style.visibility = "collapse";
+		document.getElementById("loading").style.display = "none";
+	</script>
+	
 <?php 
 require_once '../connect.php';
 if(isset($_FILES["file"])) {?>
+	
 <div class="imageView">
 <?php
 $allowedExts = array("jpg", "jpeg", "gif", "png");
@@ -122,7 +129,7 @@ $i++;
 	  /******************************************************************************/
       
 	  ?>
-	  <script>
+	<script>
     $(window).scroll(function () { 
       $("#preview").css("opacity", "0.9");
     	$("#previewTxt").hide(2500);
@@ -131,7 +138,7 @@ $i++;
 
 	</script>
 
-		<div id"tst">
+		<div id="tst">
 			<h2 id="previewTxt">Visualização da Imagem:</h2>
 			<img id="preview" src="<?php echo "builtIn/tmp/".$_FILES["file"]["name"]; ?>" />
 		</div>

@@ -83,7 +83,7 @@ $conta = sizeof($_SESSION['img']);
 		<?php if($_SESSION["total"]>0) {
 		?>
 <!-- 		<div class="container center"> -->
-		<div class="linha" style="float:left;margin:0px;width:70%">
+		<div class="linha" style="float:left;margin:0px;">
 		<?php } ?>
 		<?php
 		
@@ -110,14 +110,14 @@ foreach ($imagens as $img)
 				</div>
 				
 				<!-- Cria outra linha !-->
-				<div class="linha" style="float:left;margin:0px;width:70%;">
+				<div class="linha" style="float:left;margin:0px;">
 			<?php 
 			}
 			
 			$iNum++;
  ?>
 			<!-- Div da Imagem !-->
-			<div class="img" style="float: right;">
+			<div class="img">
 				<!-- Div da Descrição !-->
 				<div class="desc">
 					<?php echo $img; ?>

@@ -219,7 +219,7 @@ if($conta)
 		<p>
 		<?php
 			// Verifica se há mais imagens a serem impressas numa nova linha
-			if($iNum > 0 && $iNum%3==0) {	?>
+			if($iNum > 0 && $iNum%5==0) {	?>
 		<!-- Separa linhas  !-->
 		<div class="corte">&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div>
 		</div>
@@ -255,18 +255,18 @@ if($conta)
 
 <p class="centerTxt">
 		<?php
-$total = $_SESSION["total"][0];
-if($total > 10) {
-$_SESSION['res'] = $result;
-
-$j = 0;
-while($total > 0) {
-		?>
-		<a href="?nPage=<?php echo 10 * $j; ?>"><?php echo $j + 1; ?></a>
-		<?php
-		$total -= 10;
-		$j++;
-		}
+		$total = $_SESSION["total"][0];
+		if($total > 10) {
+			$_SESSION['res'] = $result;
+			
+			$j = 0;
+			while($total > 0) {
+			?>
+				<a href="?nPage=<?php echo 10 * $j; ?>"><?php echo $j + 1; ?></a>
+			<?php
+				$total -= 10;
+				$j++;
+			}
 		}
 		?>
 		</p>

@@ -14,5 +14,6 @@ do
 		echo -ne "|" 
 	fi
 	i=`expr $i + 1`;
-	convert $line -compress JPEG2000 -quality 75 -thumbnail 360\> cmp/$line ;
+	convert $line -compress JPEG2000 -quality 75 -thumbnail 450\> cmp/$line ;
+	convert $line -compress JPEG2000 -quality 75 -thumbnail 220\> cmp250/$line ;
 done
