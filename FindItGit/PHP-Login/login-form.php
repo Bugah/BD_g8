@@ -8,17 +8,16 @@
 <link href="../style.css" rel="stylesheet" type="text/css" />
 <!-- <link href="loginmodule.css" rel="stylesheet" type="text/css" /> -->
 </head>
-<body>
-<p>&nbsp;</p>
+<body class="fundaoEstiloso">
 <?php require_once 'menu.php'; ?>
 <form id="loginForm" name="loginForm" method="post" action="login-exec.php">
   <table width="300" border="0" align="center" cellpadding="2" cellspacing="0">
     <tr>
-      <td width="112"><b>Login</b></td>
+      <th width="112"><b>Login</b></td>
       <td width="188"><input name="login" type="text" class="textfield" id="login" /></td>
     </tr>
     <tr>
-      <td><b>Senha</b></td>
+      <th><b>Senha</b></td>
       <td><input name="password" type="password" class="textfield" id="password" /></td>
     </tr>
     <tr>
