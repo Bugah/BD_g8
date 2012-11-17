@@ -1,38 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<style type="text/css">
+		@import "../style.css"
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="en" />
+	<meta name="GENERATOR" content="PHPEclipse 1.2.0" />
+	<title>title</title>
+</head>
+<body>
+
+<div class="center">
+<div id="upInfo" style="background-color:#FFFFAA;padding:5px;margin-right:10px;float:left;">
 <?php
+require_once '../connect.php';
+  	$nome = str_replace("jpeg", "jpg", $_FILES["file"]["name"]);
 $allowedExts = array("jpg", "jpeg", "gif", "png");
 $extension = end(explode(".", $_FILES["file"]["name"]));
-if ((($_FILES["file"]["type"] == "image/gif")
+/* if antigo - com problemas
+ * ***************************
+ * if ((($_FILES["file"]["type"] == "image/gif")
 || ($_FILES["file"]["type"] == "image/jpeg")
+|| ($_FILES["file"]["type"] == "image/jpg")
 || ($_FILES["file"]["type"] == "image/png")
 || ($_FILES["file"]["type"] == "image/pjpeg"))
-&& ($_FILES["file"]["size"] < 20000)
+&& ($_FILES["file"]["size"] < 200000)
 && in_array($extension, $allowedExts))
+ * */
+
+if ($_FILES["file"]["type"] && in_array($extension, $allowedExts))
   {
+
+  if($_POST["titulo"]) {
+  	// Validando a entrada. Evitando Injections com '.', ',', '/', '\', '|'
+  	$carac = array(".",",","/","\\","|");						// caracteres ilegais
+  	$_POST["titulo"] = str_replace($carac,"",$_POST["titulo"]); // retirando caracteres
+//  	$_POST["titulo"] = str_replace(' ',"\ ",$_POST["titulo"]);	// corrigindo espaço
+	$_POST["titulo"] = str_replace(' ',"\ ",$_POST["titulo"]);	// corrigindo espaço  
+  	$tok = strtok($_FILES["file"]["type"],"/"); 				// procurando a extensão original do arquivo
+  	$_FILES["file"]["name"] = $_POST["titulo"].".jpg";
+  	?><h3><?php
+  	echo "Novo título: <i>".$_POST["titulo"]."</i>.";
+  	?></h3><?php
+  }
+if($extension!="jpg") {
+  	echo "Aviso: imagem convertida para formato correto! <br />";
+	   /******************************************************************************/
+	  // Criando o descritor normalizado de imagens no formato .nor através do script normaliza.sh
+      error_reporting(E_ALL);
+		/* Add redirection so we can get stderr. */
+		$handle = popen('/bin/sh upload/toJPG.sh '. $_FILES["file"]["name"] . ' fmt/' . substr($_FILES["file"]["name"], 0, -4) . ' 2>&1', 'r');
+		pclose($handle);
+		$_FILES["file"]["name"] = substr($_FILES["file"]["name"], 0, -4).".jpg";
+	  /******************************************************************************/
+  }
+	// Se ocorrer erro no upload  	
   if ($_FILES["file"]["error"] > 0)
     {
-    echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
+    echo "Error: " . $_FILES["file"]["error"] . "<br />";
     }
+	// Erro de tipo de entrada
   else
     {
+    ?><i><?php
     echo "Upload: " . $_FILES["file"]["name"] . "<br />";
-    echo "Type: " . $_FILES["file"]["type"] . "<br />";
-    echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
-    echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
-
-    if (file_exists("upload/" . $_FILES["file"]["name"]))
+    echo "Tipo: " . $_FILES["file"]["type"] . "<br />";
+    echo "Tamanho: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
+    echo "Localizado em: " . $_FILES["file"]["tmp_name"]. " <br /><br />";
+    ?></i><?php
+    }
+    if (file_exists("upload/fmt/" . $_FILES["file"]["name"]))
       {
-      echo $_FILES["file"]["name"] . " already exists. ";
+      echo $_FILES["file"]["name"] . " já existe. ";
       }
     else
       {
       move_uploaded_file($_FILES["file"]["tmp_name"],
-      "upload/" . $_FILES["file"]["name"]);
-      echo "Stored in: " . "upload/" . $_FILES["file"]["name"];
+      "upload/fmt/" . $_FILES["file"]["name"]);
+      
+	  
+	  /* Verificando qual foi o último id criado */
+	  $query = "SELECT MAX(Id) FROM TABIMG;";
+	  $result = mysql_query($query);
+	  while($id = mysql_fetch_row($result)) {
+	  	$idd =  $id;
+	  }
+	  $idd[0]++;
+	  
+	  /******************************************************************************/
+	  // Criando o descritor de imagens no formato .desc e .tags através do script criaInfo.sh
+      error_reporting(E_ALL);
+
+		/* Add redirection so we can get stderr. */
+		echo '/bin/sh criaInfo.sh "'.$_REQUEST['desc']. ' " "' . $_REQUEST['tags'] . '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" "' . substr($_FILES["file"]["name"], 0, -4) . '" ' . $idd[0] . ' 2>&1';
+		//echo "<br />";
+		$handle = popen('/bin/sh criaInfo.sh "'.$_REQUEST['desc']. ' " "' . $_REQUEST['tags'] . '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" ' . substr($_FILES["file"]["name"], 0, -4) . ' ' . $idd[0] . ' 2>&1', 'r');
+		pclose($handle);
+	  /******************************************************************************/
+	  
+      echo "<br />Local do arquivo: " . "upload/fmt/" . $_FILES["file"]["name"];
+	  
+	  /******************************************************************************/
+	  // Criando o thumbnail da imagem via script criaThumbnail.sh
+      error_reporting(E_ALL);
+
+		/* Add redirection so we can get stderr. */
+		echo '<br />/bin/sh criaThumbnail.sh '.$_FILES["file"]["name"]. ' 2>&1';
+		//echo "<br />";
+		$handle = popen('/bin/sh criaThumbnail.sh '.$_FILES["file"]["name"]. ' 2>&1', 'r');
+		pclose($handle);
+	  /******************************************************************************/
+	  
+      echo "Local do arquivo: " . "upload/cmp/" . $_FILES["file"]["name"];
       }
-    }
+	  ?>
+	 	<h2>Visualização da Imagem:</h2>
+		<img style="max-width:70%;" src="<?php echo "upload/fmt/".$_FILES["file"]["name"]; ?>" />
+		
+		<h2>Descrição da Imagem:</h2>
+		<?php
+		if(file_exists("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".info")) {
+			$lines = file("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".info");
+		
+		// Loop through our array, show HTML source as HTML source; and line numbers too.
+			foreach ($lines as $line_num => $line) {
+			    echo htmlspecialchars($line);
+			}
+		} else {
+			echo "<h3 style='color:red;'>Imagem sem descrição</h3>";
+		}
+		?>
+		</div>
+<?php
   }
-else
+	else
   {
-  echo "Invalid file";
+  	echo "<h2>Erro</h2>";
+	echo $_FILES["file"]["name"];
+  	if ((($_FILES["file"]["type"] != "image/gif")
+	|| ($_FILES["file"]["type"] != "image/jpeg")
+	|| ($_FILES["file"]["type"] != "image/png")
+	|| ($_FILES["file"]["type"] != "image/pjpeg"))) 
+	{
+  		echo "Tipo de arquivo inválido. <br>".$_FILES["file"]["type"]." não é do tipo JPEG/PNG/GIF válido.";
+	}
+	else if(($_FILES["file"]["size"] > 200000)) {
+		echo "Tamanho inválido. ". ($_FILES["file"]["size"] / 1024)."Kb > 2MB.";
+	}
+	else {
+		echo "Erro desconhecido. ";
+	}
   }
 ?>
+<p><input type="button" value="Sair" onclick="window.location='../inserir.php'" /></p>
+</div>
+
+
+
+</div>
+
+</body>
+</html>

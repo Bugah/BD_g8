@@ -33,7 +33,7 @@
 	<body>
 		
 		<?php
-			require_once 'menu.html';
+			require_once 'menu.php';
 			
 			if($_REQUEST['buscaTipo']=="Imagem")
 				include "selecionaImagem.php";

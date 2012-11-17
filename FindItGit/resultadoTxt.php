@@ -6,6 +6,12 @@
 require_once 'connect.php';
 acionaTempo();
 
+
+if(isset($_REQUEST["precisao"]))
+	$_SESSION["precisao"] = $_REQUEST["precisao"];
+else
+	$_SESSION["precisao"] = 0;
+
 // Obtendo o offset para divir a busca por páginas de resposta
 if (isset($_REQUEST["nPage"])) {
 	$offset = $_REQUEST["nPage"];
@@ -17,6 +23,31 @@ if (isset($_REQUEST["nPage"])) {
 }
 
 $termos = explode(" ", $_SESSION["texto"]);
+// echo sizeof($termos);
+$ands = array();
+$ors = array();
+$perm = array();
+
+$n = sizeof($termos);
+
+// while($nAnd < $n/($_SESSION["precisao"]+1) ) {
+	// $nAnd = 0;
+// 	
+	for($i=0;$i<$n;$i++) {
+		$p = rand(0, $_SESSION["precisao"]);
+		if(isset($ands[$i]) && !$ands[$i] && $p) {
+			$perm[$i] = 1;
+			$nAnd++;
+		}
+		else if(isset($ors[$i]) && !$ors[$i] && !$p) {
+			$perm[$i] = 0;
+		}
+		else {
+			$perm[$i] = $p;
+		}
+	} 
+// }
+// var_dump($perm);
 // print_r($termos);
 $mainRes = "SELECT Nome FROM TABIMG WHERE ";
 foreach ($termos as $t) {
@@ -26,13 +57,38 @@ foreach ($termos as $t) {
 $mainRes = substr($mainRes, 0, -5) ;
 // print_r($mainRes);
 
+$mainResRand = "SELECT Nome FROM TABIMG WHERE ";
+for($i=0;$i<$n;$i++) {
+	if($perm[$i]) {
+		$mainResRand .= "tags LIKE ('% {$t} %') AND ";
+	}
+	else {
+		$mainResRand .= "tags LIKE ('% {$t} %') OR ";
+	}
+}
+$mainResRand = substr($mainResRand, 0, -4) ;
+// echo $mainResRand;
+ // echo "<br><br><br><br><br>";
+ 
+$mainResRand2 = "SELECT Nome FROM TABIMG WHERE ";
+for($i=0;$i<$n;$i++) {
+	if($perm[$i]) {
+		$mainResRand2 .= "tags LIKE ('% {$t} %') OR ";
+	}
+	else {
+		$mainResRand2 .= "tags LIKE ('% {$t} %') AND ";
+	}
+}
+$mainResRand2 = substr($mainResRand2, 0, -4) ;
+// echo $mainResRand2;
+ // echo "<br><br><br><br><br>";
 $mainRes2 = "SELECT Nome FROM TABIMG WHERE ";
 foreach ($termos as $t) {
 	$mainRes2 .= "tags LIKE ('% {$t} %') OR ";
 }
 
 $mainRes2 = substr($mainRes2, 0, -4) ;
-// echo "<br><br><br><br><br>";
+
 // print_r($mainRes2);
 // echo "<br><br><br><br><br>";
 
@@ -54,8 +110,14 @@ else {
 	$str2 = "";
 	$str1 = "";
 }
+$i = 0;
 while ($linha = mysql_fetch_array($resultado_consulta)) {
-	$str2 .= "tags LIKE ('% {$linha['tag']} %') OR ";
+	if($perm[$i++%$n]) {
+		$str2 .= "tags LIKE ('% {$linha['tag']} %') AND ";
+	}
+	else {
+		$str2 .= "tags LIKE ('% {$linha['tag']} %') OR ";
+	}
 	//$uau[] = $linha;
 }
 /*
@@ -70,9 +132,12 @@ print_r($fusao);
 echo "<br><br>";
  */
  
- 
-$full = $mainRes . " UNION " . $mainRes2 .  $str1.$str2;
- //echo $full;
+if($_SESSION["precisao"] > 0)
+	$full = $mainRes . " UNION " . $mainResRand .  $str1.$str2;
+else {
+	$full = $mainRes . " UNION " . $mainResRand . " UNION " . $mainResRand2;
+}
+ // echo $full;
  // if($str2=="")  {
  	// // Não há resultados? Nada a somar
 	 // $conta += 0;
@@ -111,7 +176,7 @@ $full = $mainRes . " UNION " . $mainRes2 .  $str1.$str2;
 	<body>
 
 		<?php
-		require_once 'menu.html';
+		require_once 'menu.php';
 		include_once 'selecionaTexto.php';
 		?>
 		
@@ -120,9 +185,10 @@ $full = $mainRes . " UNION " . $mainRes2 .  $str1.$str2;
 		<?php
 		// Imprimindo informações
 		echo "Buscando por <span class='resultado'>" . $_SESSION["texto"] . "</span>. <br />";
-		
+		$_SESSION["total"] = array();
 		if($conta) {
 //			$_SESSION["total"] = mysql_fetch_array($conta, MYSQL_NUM);
+			
 			$_SESSION["total"][0] = $conta2;
 		} else {
 			$_SESSION["total"][0] = 0;
@@ -153,7 +219,7 @@ if($conta)
 		<p>
 		<?php
 			// Verifica se há mais imagens a serem impressas numa nova linha
-			if($iNum > 0 && $iNum%3==0) {	?>
+			if($iNum > 0 && $iNum%5==0) {	?>
 		<!-- Separa linhas  !-->
 		<div class="corte">&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div>
 		</div>
@@ -189,18 +255,18 @@ if($conta)
 
 <p class="centerTxt">
 		<?php
-$total = $_SESSION["total"][0];
-if($total > 10) {
-$_SESSION['res'] = $result;
-
-$j = 0;
-while($total > 0) {
-		?>
-		<a href="?nPage=<?php echo 10 * $j; ?>"><?php echo $j + 1; ?></a>
-		<?php
-		$total -= 10;
-		$j++;
-		}
+		$total = $_SESSION["total"][0];
+		if($total > 10) {
+			$_SESSION['res'] = $result;
+			
+			$j = 0;
+			while($total > 0) {
+			?>
+				<a href="?nPage=<?php echo 10 * $j; ?>"><?php echo $j + 1; ?></a>
+			<?php
+				$total -= 10;
+				$j++;
+			}
 		}
 		?>
 		</p>

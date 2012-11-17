@@ -15,29 +15,44 @@
 <div class="center">
 <div id="upInfo" style="background-color:#FFFFAA;padding:5px;margin-right:10px;float:left;">
 <?php
+require_once '../connect.php';
   	$nome = str_replace("jpeg", "jpg", $_FILES["file"]["name"]);
 $allowedExts = array("jpg", "jpeg", "gif", "png");
 $extension = end(explode(".", $_FILES["file"]["name"]));
-if ((($_FILES["file"]["type"] == "image/gif")
+/* if antigo - com problemas
+ * ***************************
+ * if ((($_FILES["file"]["type"] == "image/gif")
 || ($_FILES["file"]["type"] == "image/jpeg")
 || ($_FILES["file"]["type"] == "image/jpg")
 || ($_FILES["file"]["type"] == "image/png")
 || ($_FILES["file"]["type"] == "image/pjpeg"))
 && ($_FILES["file"]["size"] < 200000)
 && in_array($extension, $allowedExts))
+ * */
+
+if ($_FILES["file"]["type"] && in_array($extension, $allowedExts))
   {
 
-  if($_POST["titulo"]) {
-  	// Validando a entrada. Evitando Injections com '.', ',', '/', '\', '|'
-  	$carac = array(".",",","/","\\","|");						// caracteres ilegais
-  	$_POST["titulo"] = str_replace($carac,"",$_POST["titulo"]); // retirando caracteres
-  	$tok = strtok($_FILES["file"]["type"],"/"); 				// procurando a extensão original do arquivo
-  	$_FILES["file"]["name"] = $_POST["titulo"].".".strtok("");
-  	?><h3><?php
-  	echo "Novo título: <i>".$_POST["titulo"]."</i>.";
-  	?></h3><?php
+  /* Verificando qual foi o último id criado */
+	  $query = "SELECT MAX(Id) FROM TABIMG;";
+	  $result = mysql_query($query);
+	  while($id = mysql_fetch_row($result)) {
+	  	$idd =  $id;
+	  }
+	  $idd[0]++;
+	  
+	  $_FILES["file"]["name"] = "IMG00".$idd[0].".jpg";
+if($extension!="jpg") {
+  	echo "Aviso: imagem convertida para formato correto! <br />";
+	   /******************************************************************************/
+	  // Criando o descritor normalizado de imagens no formato .nor através do script normaliza.sh
+      error_reporting(E_ALL);
+		/* Add redirection so we can get stderr. */
+		$handle = popen('/bin/sh upload/toJPG.sh '. $_FILES["file"]["name"] . ' fmt/' . substr($_FILES["file"]["name"], 0, -4) . ' 2>&1', 'r');
+		pclose($handle);
+		// $_FILES["file"]["name"] = substr($_FILES["file"]["name"], 0, -4).".jpg";
+	  /******************************************************************************/
   }
-
 	// Se ocorrer erro no upload  	
   if ($_FILES["file"]["error"] > 0)
     {
@@ -62,22 +77,32 @@ if ((($_FILES["file"]["type"] == "image/gif")
       move_uploaded_file($_FILES["file"]["tmp_name"],
       "upload/fmt/" . $_FILES["file"]["name"]);
       
+	  
 	  /******************************************************************************/
-	  // Criando o descritor de imagens no formato .info através do script criaInfo.sh
+	  // Criando o descritor de imagens no formato .desc e .tags através do script criaInfo.sh
       error_reporting(E_ALL);
 
 		/* Add redirection so we can get stderr. */
-		echo '/bin/sh criaInfo.sh "'.$_REQUEST['desc']. '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" 2>&1';
+		// echo '/bin/sh criaInfo.sh "'.$_REQUEST['desc']. ' " "' . $_REQUEST['tags'] . '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" "' . substr($_FILES["file"]["name"], 0, -4) . '" ' . $idd[0] . ' 2>&1';
 		//echo "<br />";
-		$handle = popen('/bin/sh criaInfo.sh "'.$_REQUEST['desc']. '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" ' . substr($_FILES["file"]["name"], 0, -4) . ' 2>&1', 'r');
-		//$handle = popen('/bin/pwd', 'r');
-		//echo "'$handle'; " . gettype($handle) . "\n";
-		//$read = fread($handle, 2096);
-		//echo $read;
+		$handle = popen('/bin/sh criaInfo.sh "'.$_REQUEST['desc']. ' " "' . $_REQUEST['tags'] . '" "upload/fmt/' .substr($_FILES["file"]["name"], 0, -4). '" ' . substr($_FILES["file"]["name"], 0, -4) . ' ' . $idd[0] . ' 2>&1', 'r');
 		pclose($handle);
 	  /******************************************************************************/
 	  
-      echo "Local do arquivo: " . "upload/fmt/" . $_FILES["file"]["name"];
+      // echo "<br />Local do arquivo: " . "upload/fmt/" . $_FILES["file"]["name"];
+	  
+	  /******************************************************************************/
+	  // Criando o thumbnail da imagem via script criaThumbnail.sh
+      error_reporting(E_ALL);
+
+		/* Add redirection so we can get stderr. */
+		// echo '<br />/bin/sh criaThumbnail.sh '.$_FILES["file"]["name"]. ' 2>&1';
+		//echo "<br />";
+		$handle = popen('/bin/sh criaThumbnail.sh '.$_FILES["file"]["name"]. ' 2>&1', 'r');
+		pclose($handle);
+	  /******************************************************************************/
+	  
+      // echo "Local do arquivo: " . "upload/cmp/" . $_FILES["file"]["name"];
       }
 	  ?>
 	 	<h2>Visualização da Imagem:</h2>
@@ -85,8 +110,8 @@ if ((($_FILES["file"]["type"] == "image/gif")
 		
 		<h2>Descrição da Imagem:</h2>
 		<?php
-		if(file_exists("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".info")) {
-			$lines = file("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".info");
+		if(file_exists("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".desc")) {
+			$lines = file("upload/fmt/".substr($_FILES["file"]["name"], 0, -4).".desc");
 		
 		// Loop through our array, show HTML source as HTML source; and line numbers too.
 			foreach ($lines as $line_num => $line) {

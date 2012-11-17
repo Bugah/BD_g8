@@ -17,12 +17,12 @@
 		</script>
 	</head>
 
-	<body>
+	<body class="fundaoEstiloso">
 		<div class="center2">
-			<img src="imagens/bigLogo.jpg"/>
+			<img src="imagens/bigLogo.png"/>
 
 			<?php
-				require_once 'menu.html';
+				require_once 'menu.php';
  			?>
 		</div>
 	</body>

@@ -14,6 +14,9 @@
 	<li>
         <a href="PHP-Login/login-form.php">Login</a>
     </li>
+    <li style="float:right">
+        <?php if(isset($_SESSION['SESS_MEMBER_ID'])) echo $_SESSION['SESS_MEMBER_ID']; ?>
+    </li>
 	<!-- <li style="float:right;">
         <a onclick="$('#login').load('PHP-Login/login-form.php');" href="">Login</a>
     </li>

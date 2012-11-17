@@ -2,7 +2,7 @@
 .center {
 	margin-left: auto;
 	margin-right: auto;
-	width: 80%;
+	width: 90%;
 }
 
 .centerTxt {
@@ -15,11 +15,21 @@
 	width: 60%;
 }
 
+div.menu {
+	color: #666666;
+	font-size: 18px;
+	background: #F7F7F7;
+	border: 1px solid #CCCCCC;
+	border-radius: 15px;
+	padding: 3px;
+	margin-top: 25px;
+}
+
 /* para quebrar linha em div, usado na separação do resultado de imagens */
 .corte {
 	z-index: -1;
 	opacity: 0.1;
-	margin: 500px;
+	margin: 50%;
 	display: inline;
 }
 
@@ -48,6 +58,11 @@ img.imagem {
 img.imagem:hover {
 	top: 3px;
 	background: url(imagens/miniaturas2.png) 30px 29px;
+}
+
+span.score {
+	color: navy;
+	line-height: 30px;
 }
 
 /* Estilizando o formulário de inserção de imagens */
@@ -89,6 +104,11 @@ img.imagem:hover {
 	border-style: outset;
 }
 
+h1 {
+	font: bold 30px Verdana, Arial, Helvetica, sans-serif;
+	border-bottom: 1px dashed #E6E8ED;
+}
+
 a:link {
 	text-decoration: none;
 }/* unvisited link */
@@ -125,29 +145,31 @@ div.imageView {
 	float: right;
 	text-align: center;
 }
+
 div.imageView:hover {
-	background-color: none;
+/*	background-color: none;*/
 }
 
 div.imageView img {
-	max-width: 450px;
+	max-width: 28%;
+	max-height: 75%;
 	position: fixed;
 	right: 0px;
 /*	display: inline;*/
 
 	border: 1px solid #ffffff;
-	transition: max-height 1s;
-	-moz-transition: max-height 1s; /* Firefox 4 */
-	-webkit-transition: max-height 1s; /* Safari and Chrome */
-	-o-transition: max-height 1s; /* Opera */
-	transition: max-width 1s;
-	-moz-transition: max-width 1s; /* Firefox 4 */
-	-webkit-transition: max-width 1s; /* Safari and Chrome */
-	-o-transition: max-width 1s; /* Opera */
+	/*transition: max-height 1s;
+	/*-moz-transition: max-height 1s; /* Firefox 4 */
+	/*-webkit-transition: max-height 1s; /* Safari and Chrome */
+	/*-o-transition: max-height 1s; /* Opera */
+	/*transition: max-width 1s;
+	/*-moz-transition: max-width 1s; /* Firefox 4 */
+	/*-webkit-transition: max-width 1s; /* Safari and Chrome */
+	/*-o-transition: max-width 1s; /* Opera */
 }
 div.imageView img:hover {
-	max-width: 60%;
-	max-height: 100%;
+/*	max-width: 60%;*/
+/*	max-height: 100%;*/
 	border: 5px inset #0000ff;
 }
 
@@ -164,12 +186,12 @@ div.img {
 }
 
 div.img:hover {
-	max-width: 60%;
+/*	max-width: 60%;*/
 }
 div.img img {
 	display: inline;
-	max-height: 200px;
-	max-width: 200px;
+	max-height: 250px;
+	max-width: 250px;
 	margin: 0px;
 	border: 1px solid #ffffff;
 	transition: max-height 1s;
@@ -181,13 +203,15 @@ div.img img {
 	-webkit-transition: max-width 1s; /* Safari and Chrome */
 	-o-transition: max-width 1s; /* Opera */
 }
+/*
 div.img a:hover img {
 	width: 100%;
 	height: 100%;
-	max-width: 550px;
+	max-width: 300px;
 	max-height: 100%;
 	border: 5px inset #0000ff;
-}
+}*/
+
 div.desc {
 	/*visibility: hidden;*/
 	z-index: +1;
@@ -200,14 +224,16 @@ div.desc {
 	margin: 0px;
 }
 div.linha {
+	padding-top : 5px;
+	padding-left: 15px;
 	border-radius: 15px;
 	border-bottom: 5px inset #123456;
 	background: #E0E0E0;
 	/*background: green;*/
 	
 	display: block;
-	margin: 20px;
-	padding-left: 200px;
+/*	margin: 20px;*/
+/*	padding-left: 200px;*/
 	/*min-height: 200px;*/
 	height: auto;
 	transition: padding-left 1s;
@@ -217,7 +243,7 @@ div.linha {
 }
 div.linha:hover {
 	height: auto;
-	padding-left: 0px;
+/*	padding-left: 0px;*/
 	transition: padding-left 1s;
 	-moz-transition: padding-left 1s; /* Firefox 4 */
 	-webkit-transition: padding-left 1s; /* Safari and Chrome */

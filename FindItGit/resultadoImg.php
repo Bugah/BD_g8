@@ -32,8 +32,10 @@ $conta = sizeof($_SESSION['img']);
 		<script src="jquery-1.8.2.min.js"></script>
 		<script>
 			$(".desc").hide();
+			$(".score").hide();
 			$(".img").hover(function() {
 				$(this).find("div").toggle(500);
+				$(this).find("span").toggle(500);
 			});
 			xtmp = $(".linha").css("padding-left");
 			$(".linha").click(function() {
@@ -75,13 +77,13 @@ $conta = sizeof($_SESSION['img']);
 		</p>
 		
 		<p class="centerTxt">
-			<?php navPage($_SESSION["total"]); ?>
+			<?php //navPage($_SESSION["total"]); ?>
 		</p>
 	
 		<?php if($_SESSION["total"]>0) {
 		?>
 <!-- 		<div class="container center"> -->
-		<div class="linha" style="float:left;margin:0px;">
+		<div class="linha" style="float:left;margin:0px;width:70%">
 		<?php } ?>
 		<?php
 		
@@ -108,14 +110,14 @@ foreach ($imagens as $img)
 				</div>
 				
 				<!-- Cria outra linha !-->
-				<div class="linha" style="float:left;margin:0px;">
+				<div class="linha" style="float:left;margin:0px;width:70%;">
 			<?php 
 			}
 			
 			$iNum++;
  ?>
 			<!-- Div da Imagem !-->
-			<div class="img">
+			<div class="img" style="float: right;">
 				<!-- Div da Descrição !-->
 				<div class="desc">
 					<?php echo $img; ?>
@@ -124,20 +126,25 @@ foreach ($imagens as $img)
 			<a target="_blank"" " " " href= "<?php echo "builtIn/mostraImagem.php?imgName=" . $img . ".jpg"; ?>" > <img alt="Imagem sem thumbnail" src=<?php echo "builtIn/upload/fmt/cmp/".$img.".jpg"; ?> alt="<?php echo $img; ?>"  /> </a>
 			<?php 
 				//echo $_SESSION['points'][$iNum-1] . "<br/>";
-				$calc = 200-200000*$_SESSION['points'][$iNum-1]*$_SESSION['points'][$iNum-1];
-				//echo $calc;
+				$offset = (2000*pow($_SESSION['points'][$iNum-1], 5));
+				$calc = 100-$offset%100;
+				// echo $offset . "<br />";
+				// echo $_SESSION['points'][$iNum-1] . "<br />";
+				// echo $calc;
 				?>
+				
 				<br />
+				<span class="score">Pontuação: <?php echo $calc; ?> </span>
 			<canvas id="canvas<?php echo $img; ?>" width="100" height="15" style="border:1px solid #c3c3c3;">
 			</canvas>
 			<script> //get a reference to the canvas
 				var ctx = $('#canvas<?php echo $img; ?>')[0].getContext("2d");
 				
 				var lingrad = ctx.createLinearGradient(0,0,100,15);
-    lingrad.addColorStop(0, '#EE0000');
-    lingrad.addColorStop(0.5, '#CCCC00');
-    lingrad.addColorStop(1, '#00AA00');
-				
+			    lingrad.addColorStop(0, '#EE0000');
+			    lingrad.addColorStop(0.5, '#CCCC00');
+			    lingrad.addColorStop(1, '#00AA00');
+							
 				// ctx.fillStyle = "#00A308";
 				ctx.fillStyle = lingrad;
 				//ctx.beginPath();
@@ -164,7 +171,7 @@ foreach ($imagens as $img)
 	<?php } ?>
 <div class="corte">&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div>
 	<p class="centerTxt">
-			<?php navPage($_SESSION["total"]); ?>
+			<?php //navPage($_SESSION["total"]); ?>
 		</p>
 
 
