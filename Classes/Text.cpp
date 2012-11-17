@@ -234,6 +234,6 @@ Text Text::operator- (string param) {
 // Operator <<
 std::ostream& operator<<(std::ostream& output, const Text& obj) {
 	size_t i;
-	for(i=0; i<obj.txt.size(); i++) output << obj.txt[i].c_str() << endl;
+	for(i=0; i<obj.txt.size(); i++)	output << obj.txt[i].c_str() << endl;
 	return output;
 }

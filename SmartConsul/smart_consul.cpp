@@ -22,14 +22,13 @@ string inner_join(Text, Text);
 
 int main(int argc, char * argv[]) {
 	/* Declaracoes */
-	size_t i, j, count = 0;
+	size_t i, count = 0;
+	int j;
 	string str, tmp; // Retiram os valores no arquivo
-	//vector<string> anin; // Aninhamento de Tags
 	Text tags, aux, dicio, asw; // Tags retiradas do texto
 
 	// Arquivos de Entrada e Saida
 	ifstream infile; // Arquivo com dicionario de Tags
-	ofstream outfile("Results.txt"); // Impressao de Resultados
 
 	/* Objetos MySQL */
 	sql::mysql::MySQL_Driver * driver;
@@ -39,8 +38,8 @@ int main(int argc, char * argv[]) {
 	/* Fim das Declaracoes */
 
 	/* Faz a conversao do texto digitado para objetos texto */
-	for (i = 1; i < (size_t) argc; i++)
-		tags += argv[i];
+	for (j = 1; j < (size_t) argc; j++)
+		tags += argv[j];
 
 	// Abre o Dicionario de tags
 	infile.open("dicionarioTags.tags");
@@ -65,8 +64,6 @@ int main(int argc, char * argv[]) {
 		cout << "Nenhuma tag encontrada na descricao!" << endl;
 		return -1;
 	}
-	//anin = permrep(tags.getSize() - 1, anin.size(), anin);
-	/* Fim da Inicializacao do Aninhamento */
 
 	/* Agora criamos a Query que realiza a Busca na Tabaelas de Imagens
 	 * Treinadas, futuramente considerando Relacionadas */
@@ -79,18 +76,16 @@ int main(int argc, char * argv[]) {
 		/* Fim da conexao com o schema definido no Header */
 
 		aux.clear();
-		for (i = 0; i < tags.getSize(); i++)	{
+		for (i = 0; i < tags.getSize(); i++)
 			aux += i;
-			cout << aux.getIWord(i) << endl;
-		}
 
 		str.clear();
-		str.append("(Select * From IMG_TREINADA t0 ");
+		str.append("(Select t0.Id From IMG_TREINADA t0 ");
 		if(tags.getSize() > 1)	str.append(inner_join(tags, aux));
+		str.append("Where (");
 
 		/* Trata das clausulas Where */
 		for (i = 0; i < tags.getSize(); i++) {
-			str.append("Where (");
 			str.append("t");
 			str.append(aux.getIWord(i));
 			str.append(".Tag = '");
@@ -102,13 +97,8 @@ int main(int argc, char * argv[]) {
 				str.append(" AND ");
 			}
 		}
-		str.append(") Order By Contador DESC)");
+		str.append(") Order By t0.Contador DESC)");
 		/* Termina de montar a Query de Busca! */
-
-		/* Imprimi a Query para buscar as tags principais aninhadas
-		cout << str << endl;
-		cout << endl;
-		*/
 
 		stmt = con->createStatement();
 		res = stmt->executeQuery(str);
@@ -121,12 +111,12 @@ int main(int argc, char * argv[]) {
 		/* Se ja achou um resultado bom de pesquisa */
 		if (count >= 20) {
 			asw.no_repeat();
-			cout << asw << endl;
+			cout << asw;
 			return 0;
 		}
 
 		/* Resultados insulficientes! Procura na tabela geral */
-		str.append(" UNION (Select * From TABIMG Where ");
+		str.append(" UNION (Select Id From TABIMG Where ");
 		for (i = 0; i < tags.getSize(); i++) {
 			str.append("Tags Like \"% ");
 			str.append(tags.getIWord(i));
@@ -145,10 +135,6 @@ int main(int argc, char * argv[]) {
 		}
 		str.append("))");
 
-		/* Imprimi a Query
-		cout << str << endl;
-		res = stmt->executeQuery(str);
-
 		/* Colhe o resultado da Query */
 		count = 0;
 		while (res->next()) {
@@ -156,9 +142,9 @@ int main(int argc, char * argv[]) {
 			asw += res->getInt("Id");
 		}
 
-		if (count > 20) {
+		if (count >= 20) {
 			asw.no_repeat();
-			cout << asw << endl;
+			cout << asw;
 			return 0;
 		}
 
@@ -184,47 +170,9 @@ int main(int argc, char * argv[]) {
 		}
 
 		asw.no_repeat();
-		cout << asw << endl;
+		cout << asw;
 		return 0;
 
-		/* Se chegou aqui e ainda deu pau... Bom, chora!
-		   Por enquanto...
-		/* Arruma a Pega as Tags Relacionadas */
-		/*
-		 for (i = 0; i < tags.getSize(); i++) {
-		 /* str: contem a query final
-		 * tmp: serve como peao, seu resultado final nao interessa
-		 *
-		 tmp = "SELECT relacionadas FROM TAGS_RELACIONADAS "
-		 "WHERE tag LIKE \"%";
-
-		 tmp.append(tags.getIWord(i));
-		 tmp.append("%\"");
-
-		 /* Executa o Select no DB e se prepara para Buscar os resultados
-		 stmt = con->createStatement();
-		 res = stmt->executeQuery(tmp);
-
-		 /* Transforma a string com as tags relacionadas em objetos Texto
-		 res->next();
-		 aux = res->getString("relacionadas");
-
-		 /* Limpa o conteudo do vetor de aninhamento inicial
-		 //anin.clear();
-		 //anin.push_back("AND");
-		 tmp.clear();
-		 for (j = 0; j < aux.getSize() - 1; j++)
-		 tmp.append("OR ");
-
-		 //anin.push_back(tmp);
-
-		 /* Precisamos reiniciar o vetor de aninhamento
-		 //anin = permrep(aux.getSize()-1, anin.size(), anin);
-		 //str.append(getcmd(anin, aux));
-		 if (i + 1 != tags.getSize())
-		 str.append(" UNION ");
-		 }
-		 */
 	} catch (sql::SQLException &e) {
 		cout << "# ERR: SQLException in " << __FILE__;
 		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
@@ -232,9 +180,6 @@ int main(int argc, char * argv[]) {
 		cout << " (MySQL error code: " << e.getErrorCode();
 		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
 	}
-
-	/* Imprime a Query das Relacionadas */
-	cout << str << endl;
 
 	return 0;
 }
@@ -246,10 +191,10 @@ string inner_join(Text tags, Text aux) {
 	for (i=1; i<aux.getSize(); i++) {
 		tmp.append("IMG_TREINADA t");
 		tmp.append(aux.getIWord(i));
-		if(i+1 != aux.getSize())	tmp.append(" ");
+		if(i+1 != aux.getSize())	tmp.append(", ");
 	}
 
-	tmp.append(" ON (");
+	tmp.append(") ON (");
 
 	for (i=1; i<aux.getSize(); i++) {
 		tmp.append("t0.Id = t");

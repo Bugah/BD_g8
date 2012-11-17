@@ -2,10 +2,10 @@ all: Linux
 
 # Linux Fag!
 Linux:
-	g++ -o Consultor -I/usr/include -I/usr/include/ -l mysqlcppconn main.cpp Text.cpp /usr/lib/libmysqlcppconn.so
+	g++ -o Consultor -I/usr/include -I/usr/include/ -l mysqlcppconn smart_consul.cpp Text.cpp /usr/lib/libmysqlcppconn.so
 
 debug:
-	g++ -o Consultor -I/usr/include -I/usr/include/ -l mysqlcppconn main.cpp Text.cpp /usr/lib/libmysqlcppconn.so -g
+	g++ -o Consultor -I/usr/include -I/usr/include/ -l mysqlcppconn smart_consul.cpp Text.cpp /usr/lib/libmysqlcppconn.so -g
 
 gdb:
 	gdb Consultor
