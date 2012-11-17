@@ -80,7 +80,7 @@ if (isset($_REQUEST['buscaTipo'])) {
 		<input type="text" class="text" name="texto" id="texto" value="" size="50" maxlength="100" autofocus="" onchange="confereImg(this)"/>
 		
 		<input id="submeter" type="submit" value="Buscar" onclick="return valida();" />
-		<input type="button" id="avancado" value="Avançado"/>
+<!-- 		<input type="button" id="avancado" value="Avançado"/> -->
 	</p>
 	<p id="pPrescisao">
 		Precisão de busca: 

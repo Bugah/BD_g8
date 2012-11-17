@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <stdlib.h>
+#include <iomanip> // Formatação da saída para interface
 #include "Text.h"
 #include "mysql_header.h"
 using namespace sql;
@@ -111,6 +112,7 @@ int main(int argc, char * argv[]) {
 		/* Se ja achou um resultado bom de pesquisa */
 		if (count >= 20) {
 			asw.no_repeat();
+		cout << setw (10);
 			cout << asw;
 			return 0;
 		}
@@ -144,6 +146,7 @@ int main(int argc, char * argv[]) {
 
 		if (count >= 20) {
 			asw.no_repeat();
+		cout << setw (10);
 			cout << asw;
 			return 0;
 		}
@@ -170,6 +173,7 @@ int main(int argc, char * argv[]) {
 		}
 
 		asw.no_repeat();
+		cout << setw (10);
 		cout << asw;
 		return 0;
 

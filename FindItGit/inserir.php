@@ -11,7 +11,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="Content-Language" content="pt-br" />
 	<meta name="GENERATOR" content="PHPEclipse 1.2.0" />
-	<title>FindIt</title>
+	<title>FindIt - Inserção de Imagens</title>
 </head>
 
 <script type="text/javascript" ">
@@ -23,7 +23,7 @@
 	}
 </script>
 
-<body>
+<body class="fundaoEstiloso">
 <?php require_once 'menu.php'; ?>
 <h1>Upload de imagens</h1>
 

@@ -5,10 +5,10 @@
 	<a href="index.php"><img style="float:left;" src="imagens/secLogo.png" height="70px" /></a>
 	<li>
 		
-		<a href="buscaImagem.php?buscaTipo=Texto"><img class="texto" title="texto" src="imagens/transp50.png"/> Texto</a>
+		<a href="buscaImagem.php?buscaTipo=Texto"><img class="texto" title="texto" src="imagens/transp50.png"/>Texto</a>
 	</li>
 	<li>
-		<a href="buscaImagem.php?buscaTipo=Imagem"><img class="imagem" title="imagem" src="imagens/transp50.png"/> Imagem</a>
+		<a href="buscaImagem.php?buscaTipo=Imagem"><img class="imagem" title="imagem" src="imagens/transp50.png"/>Imagem</a>
 	</li>
 	<li>
 		<a href="inserir.php">Inserir Imagem</a>

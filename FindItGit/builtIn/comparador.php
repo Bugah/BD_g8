@@ -140,7 +140,7 @@ $i++;
 
 		<div id="tst">
 			<h2 id="previewTxt">Visualização da Imagem:</h2>
-			<img id="preview" src="<?php echo "builtIn/tmp/".$_FILES["file"]["name"]; ?>" />
+			<img id="preview" style="float: left;" src="<?php echo "builtIn/tmp/".$_FILES["file"]["name"]; ?>" />
 		</div>
 	</div>
 <?php

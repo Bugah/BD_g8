@@ -22,15 +22,15 @@ function guarda($sessao, $varv) {
 }
 
 // Imprime a lista de páginas da pesquisa
-function navPage($num) {
+function navPage($num, $perPage) {
 	$total = $num;
-	if($total > 10) {
+	if($total > $perPage) {
 		$j = 0;
 		while($total > 0) {
 		?>
 			<a href="?nPage=<?php echo 10 * $j; ?>"><?php echo $j + 1; ?></a>
 		<?php
-			$total -= 10;
+			$total -= $perPage;
 			$j++;
 		}
 	}

@@ -37,6 +37,11 @@ $conta = sizeof($_SESSION['img']);
 				$(this).find("div").toggle(500);
 				$(this).find("span").toggle(500);
 			});
+			
+			$(".linha").hover(function() {
+				$(this).css("cursor", "sw-resize");
+			});
+			
 			xtmp = $(".linha").css("padding-left");
 			$(".linha").click(function() {
 				var y = $(this).find("img").css("max-height");
@@ -83,7 +88,7 @@ $conta = sizeof($_SESSION['img']);
 		<?php if($_SESSION["total"]>0) {
 		?>
 <!-- 		<div class="container center"> -->
-		<div class="linha" style="float:left;margin:0px;width:70%">
+		<div class="linha" style="float:right;margin:0px;width:70%">
 		<?php } ?>
 		<?php
 		
@@ -110,20 +115,20 @@ foreach ($imagens as $img)
 				</div>
 				
 				<!-- Cria outra linha !-->
-				<div class="linha" style="float:left;margin:0px;width:70%;">
+				<div class="linha" style="float:right;margin:0px;width:70%;">
 			<?php 
 			}
 			
 			$iNum++;
  ?>
 			<!-- Div da Imagem !-->
-			<div class="img" style="float: right;">
+			<div class="img" style="float: left;">
 				<!-- Div da Descrição !-->
 				<div class="desc">
 					<?php echo $img; ?>
 				</div>
 			<!-- Colocando a imagem !-->
-			<a target="_blank"" " " " href= "<?php echo "builtIn/mostraImagem.php?imgName=" . $img . ".jpg"; ?>" > <img alt="Imagem sem thumbnail" src=<?php echo "builtIn/upload/fmt/cmp/".$img.".jpg"; ?> alt="<?php echo $img; ?>"  /> </a>
+			<a target="_blank" href= "<?php echo "builtIn/mostraImagem.php?imgName=" . $img . ".jpg"; ?>" > <img alt="Imagem sem thumbnail" src=<?php echo "builtIn/upload/fmt/cmp/".$img.".jpg"; ?> alt="<?php echo $img; ?>"  /> </a>
 			<?php 
 				//echo $_SESSION['points'][$iNum-1] . "<br/>";
 				$offset = (2000*pow($_SESSION['points'][$iNum-1], 5));

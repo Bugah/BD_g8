@@ -5,6 +5,16 @@
 	width: 90%;
 }
 
+.fundaoEstiloso {
+	background: -moz-linear-gradient(0deg, #DEDEFF, #FFFFFF 20%, #FFFFFF 80%, #DEDEFF);
+ 	background: -webkit-gradient(linear, left center, right center, from(#DEDEFF), to(#FFFFFF));
+}
+
+.match {
+	background: #55FF55;
+	text-decoration: none;
+}
+
 .centerTxt {
 	text-align: center;
 }
@@ -65,6 +75,10 @@ span.score {
 	line-height: 30px;
 }
 
+#loginForm th {
+	text-align: right;
+}
+
 /* Estilizando o formulário de inserção de imagens */
 #upForm {
 	text-align: center;
@@ -72,13 +86,12 @@ span.score {
 
 /* Menu principal */
 #listaPrincipal {
-	text-shadow: silver;
 	list-style: none;
 	padding-bottom: 70px; /* Força Quebra de linha */
 }
 
 #listaPrincipal li {
-	padding: 5px;
+	padding: 4px;
 	height: 40px;
 	border-radius: 15px;
 	-moz-border-radius: 15px; /* Firefox 3.6 and earlier */
@@ -92,6 +105,9 @@ span.score {
 	line-height: 40px; /* Centraliza o texto verticalmente */
 }
 
+#listaPrincipal li img {
+	margin-right: 5px;
+}
 #listaPrincipal li:hover {
 	border-style: inset;
 }
@@ -106,7 +122,7 @@ span.score {
 
 h1 {
 	font: bold 30px Verdana, Arial, Helvetica, sans-serif;
-	border-bottom: 1px dashed #E6E8ED;
+	border-bottom: 2px dashed #E6E8ED;
 }
 
 a:link {
@@ -142,34 +158,34 @@ div.imageView {
 	color: navy;
 	height: auto;
 	width: auto;
-	float: right;
+	float: left;
 	text-align: center;
 }
 
 div.imageView:hover {
-/*	background-color: none;*/
+	/*	background-color: none;*/
 }
 
 div.imageView img {
-	max-width: 28%;
+	max-width: 26%;
 	max-height: 75%;
 	position: fixed;
-	right: 0px;
-/*	display: inline;*/
+	left: 0px;
+	/*	display: inline;*/
 
 	border: 1px solid #ffffff;
 	/*transition: max-height 1s;
-	/*-moz-transition: max-height 1s; /* Firefox 4 */
+	 /*-moz-transition: max-height 1s; /* Firefox 4 */
 	/*-webkit-transition: max-height 1s; /* Safari and Chrome */
 	/*-o-transition: max-height 1s; /* Opera */
 	/*transition: max-width 1s;
-	/*-moz-transition: max-width 1s; /* Firefox 4 */
+	 /*-moz-transition: max-width 1s; /* Firefox 4 */
 	/*-webkit-transition: max-width 1s; /* Safari and Chrome */
 	/*-o-transition: max-width 1s; /* Opera */
 }
 div.imageView img:hover {
-/*	max-width: 60%;*/
-/*	max-height: 100%;*/
+	/*	max-width: 60%;*/
+	/*	max-height: 100%;*/
 	border: 5px inset #0000ff;
 }
 
@@ -186,12 +202,12 @@ div.img {
 }
 
 div.img:hover {
-/*	max-width: 60%;*/
+	/*	max-width: 60%;*/
 }
 div.img img {
 	display: inline;
-	max-height: 250px;
-	max-width: 250px;
+	max-height: 200px;
+	max-width: 200px;
 	margin: 0px;
 	border: 1px solid #ffffff;
 	transition: max-height 1s;
@@ -204,13 +220,13 @@ div.img img {
 	-o-transition: max-width 1s; /* Opera */
 }
 /*
-div.img a:hover img {
-	width: 100%;
-	height: 100%;
-	max-width: 300px;
-	max-height: 100%;
-	border: 5px inset #0000ff;
-}*/
+ div.img a:hover img {
+ width: 100%;
+ height: 100%;
+ max-width: 300px;
+ max-height: 100%;
+ border: 5px inset #0000ff;
+ }*/
 
 div.desc {
 	/*visibility: hidden;*/
@@ -224,16 +240,17 @@ div.desc {
 	margin: 0px;
 }
 div.linha {
-	padding-top : 5px;
+	padding-top: 5px;
 	padding-left: 15px;
+	padding-right: 15px;
 	border-radius: 15px;
 	border-bottom: 5px inset #123456;
 	background: #E0E0E0;
 	/*background: green;*/
 	
 	display: block;
-/*	margin: 20px;*/
-/*	padding-left: 200px;*/
+	/*	margin: 20px;*/
+	/*	padding-left: 200px;*/
 	/*min-height: 200px;*/
 	height: auto;
 	transition: padding-left 1s;
@@ -242,8 +259,10 @@ div.linha {
 	-o-transition: padding-left 1s; /* Opera */
 }
 div.linha:hover {
+/*	cursor: sw-resize;*/
+	background: #A0A0A0;
 	height: auto;
-/*	padding-left: 0px;*/
+	/*	padding-left: 0px;*/
 	transition: padding-left 1s;
 	-moz-transition: padding-left 1s; /* Firefox 4 */
 	-webkit-transition: padding-left 1s; /* Safari and Chrome */
@@ -258,7 +277,7 @@ div.linha:hover {
 p.destaque {
 	margin-left: auto;
 	margin-right: auto;
-	width:80%;
+	width: 80%;
 	padding: 10px;
 	background: #C4C3C2;
 	border-radius: 15px;
@@ -271,3 +290,11 @@ p.destaque span {
 	color: #123456;
 	font-variant: small-caps;
 }
+
+div.barraLateral {
+	width: 50px;
+	display: inline;
+	float: right;
+	right: 0;
+}
+

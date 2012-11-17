@@ -3,7 +3,7 @@
 <html>
 
 	<head>
-		<title>Busca via Imagem</title>
+		<title>FindIt - Busca via Imagem</title>
 		<style>
 			@import "style.css";
 		</style>
@@ -30,7 +30,7 @@
 
 	</head>
 
-	<body>
+	<body class="fundaoEstiloso">
 		
 		<?php
 			require_once 'menu.php';
@@ -67,7 +67,7 @@
 		</div>
 
 		<?php
-		if($iNum>0 && $iNum%3==0) {?>
+		if($iNum>0 && $iNum%5==0) {?>
 					<div class="corte">&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div>
 					</div>
 					<div class="linha">

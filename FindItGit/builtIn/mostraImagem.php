@@ -1,4 +1,6 @@
 <?php
+
+
 $filename = "upload/fmt/".substr($_REQUEST['imgName'],0,-4);
 ?>
 <!DOCTYPE HTML>
@@ -49,13 +51,45 @@ if(isset($_REQUEST['imgName'])) {
 <?php
 
 if(file_exists($filename.".tags")) {
-	$file_handle = fopen($filename.".tags", "r");
-	if($file_handle) 
-	while (!feof($file_handle)) {
-	   $line = fgets($file_handle);
-	   echo $line;
-	}
-	fclose($file_handle);
+	// echo $_GET["pesquisa"];
+	$id = (int)substr($filename, -6);
+	
+	$pesquisa = substr($_GET["pesquisa"], 1,-1);
+	
+	// echo $pesquisa;
+	
+	$termos = explode(' ', $pesquisa);
+	
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Imagem, ou pelo sua tag existente, acionando treinador Davis!
+	////////////////////////
+	error_reporting(E_ALL);
+	/* Add redirection so we can get stderr. */
+	$cmd = '/bin/sh treina.sh '.$id. ' ' . $_GET["pesquisa"] . ' 2>&1';
+	
+	/* Executa o comando e retorna a saída para $test */
+	exec($cmd,$test);
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	// $file_handle = fopen($filename.".tags", "r");
+	// if($file_handle) 
+	// while (!feof($file_handle)) {
+	   // $line = fgets($file_handle);
+	   // echo $line;
+	// }
+	// fclose($file_handle);
+	
+	$fh = fopen($filename.".tags", "rb");
+	$data = fread($fh, 4096);
+	foreach ($termos as $t) {
+		$t = str_replace(' ', '', $t);
+			// $data = str_replace(' '.$t.' ', "<span class='match'> ".$t." </span>", $data);
+			$data = preg_replace('/\b'.preg_quote($t, '/').'\b/', "<span class='match'>".$t."</span>", $data);
+		}
+	echo $data;
 }
 else {
 	echo "Imagem sem tags.";
@@ -79,7 +113,7 @@ else {
 ?>
 		</p>
 		
-		<img id="zoom" alt="Sem imagem" class="center2" src="upload/fmt/<?php echo $_REQUEST['imgName']; ?>" />
+		<img id="zoom" alt="Sem imagem" style="cursor:url(../imagens/lupa.png), auto" class="center2" src="upload/fmt/<?php echo $_REQUEST['imgName']; ?>" />
 <?php
 } else {
 ?>
