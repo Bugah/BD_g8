@@ -2,7 +2,7 @@
  * Title: Text.h --------------------------------------------------------------
  * Author: andre --------------------------------------------------------------
  * Created on: Oct 23, 2012 ---------------------------------------------------
- * Last Changed on: Nov 11, 2012 ----------------------------------------------
+ * Last Changed on: Nov 14, 2012 ----------------------------------------------
  * ----------------------------------------------------------------------------
  * ------------------------------------------------------------------------- */
 
@@ -149,7 +149,31 @@ Text Text::exceptWith(char letter) {
 	temp = *this-temp;
 	return temp;
 }
+/*---------------------------------------------------------------------------*/
+void Text::erase(string param) {
+	size_t i;
+	for(i=0; i<this->txt.size(); i++) if(param == this->txt.at(i))
+		this->erase(i);
+}
+/*---------------------------------------------------------------------------*/
+void Text::no_repeat(){
+	size_t i, found;	string str;
+	vector<size_t> tmp;
 
+	for(i=0; i<this->txt.size(); i++) {
+		str = this->txt.at(i);
+		found = this->find_first_of(str);
+		while (found != string::npos) {
+			found = this->find_first_of(str, (found+1));
+			if(found != string::npos)	tmp.push_back(found);
+		}
+
+		for (found=0; found<tmp.size(); found++) {
+			this->erase(tmp.at(found));
+		}
+		tmp.clear();
+	}
+}
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 // Overwrite
@@ -158,6 +182,12 @@ void Text::operator= (string param) {
 	Text tmp;
 	tmp.create(param);
 	*this = tmp;
+}
+
+void Text::operator=(size_t i) {
+	stringstream convert;
+	convert << i;
+	this->operator =(convert.str());
 }
 /*---------------------------------------------------------------------------*/
 // Operator +
@@ -173,6 +203,13 @@ Text Text::operator+ (string param) {
 	Text temp, aux;
 	temp = *this;	aux.create(param);
 	return temp+aux;
+}
+/*---------------------------------------------------------------------------*/
+// Operator +=
+void Text::operator+=(size_t i) {
+	Text tmp;
+	tmp  = i;
+	this->operator =(this->operator +(tmp));
 }
 /*---------------------------------------------------------------------------*/
 // Operator -
