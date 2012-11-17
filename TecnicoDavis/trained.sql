@@ -1,0 +1,52 @@
+-- MySQL dump 10.13  Distrib 5.5.28, for debian-linux-gnu (i686)
+--
+-- Host: localhost    Database: test
+-- ------------------------------------------------------
+-- Server version	5.5.28-0ubuntu0.12.04.2
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `IMG_TREINADA`
+--
+
+DROP TABLE IF EXISTS `IMG_TREINADA`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `IMG_TREINADA` (
+  `Id` int(11) NOT NULL,
+  `Tag` varchar(511) NOT NULL DEFAULT '',
+  `Contador` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`,`Tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `IMG_TREINADA`
+--
+
+LOCK TABLES `IMG_TREINADA` WRITE;
+/*!40000 ALTER TABLE `IMG_TREINADA` DISABLE KEYS */;
+INSERT INTO `IMG_TREINADA` VALUES (41,'animal',3),(41,'cat',1),(41,'lion',1),(46,'cat',1),(46,'dog',13),(50,'dog',13),(145,'cat',1),(147,'dog',18),(147,'puppy',7),(329,'dog',13),(400,'dog',13),(406,'dog',13),(469,'cat',1),(534,'cat',1),(540,'cat',1),(589,'dog',14),(589,'puppy',11),(610,'cat',1),(617,'dog',13),(717,'cat',1),(718,'cat',1),(1205,'puppy',9);
+/*!40000 ALTER TABLE `IMG_TREINADA` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-11-16 23:32:33
