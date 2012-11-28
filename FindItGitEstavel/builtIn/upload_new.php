@@ -76,18 +76,18 @@ if ((($_FILES["file"]["type"] == "image/gif")
 	  /******************************************************************************/
 
         /* Buscar tags relacionadas */
-        tags = str_replace(' ', '-', $_REQUEST['tags'];
-        tags = explode(',',tags);
+        $tags = str_replace(' ', '-', $_REQUEST['tags'];
+        $tags = explode(',',$tags);
 
         // QUERY:
-        // 
         $cn = mysql_connect($host, $user, $pass) or die ("<br><br><center>Problemas ao conectar no servIDor: " . mysql_error() . "</center>");
         $banc = mysql_select_db($base) or die ("<br><br><center>Problemas ao selecionar a base de dados do sistemas: " . mysql_error() . "</center>");
 
-        $query_consultar = "SELECT EXISTS (SELECT 1 FROM TAGS_RELACIONADAS_FINAL WHERE tags = \"{$tags[i]}\")"
-        $resultado_consulta = mysql_query($query_consultar);
-        if (!$resultado_consulta) chamascript;
-
+        foreach ($tags as $tag) {
+          $query_consultar = "SELECT EXISTS (SELECT 1 FROM TAGS_RELACIONADAS_FINAL WHERE tags = \"{$tag}\")"
+          $resultado_consulta = mysql_query($query_consultar);
+          if (!$resultado_consulta) shell_exec("ruby related.rb {$tag} > /dev/null 2>&1 &");
+        }
 	  
       echo "Local do arquivo: " . "upload/" . $_FILES["file"]["name"];
       }
