@@ -10,7 +10,7 @@ CREATE TABLE  Usuarios (
 
     Sobrenome varchar(30) NOT NULL,
 
-    Senha varchar(32) NOT NULL,
+    Senha varchar(16) NOT NULL,
 
     PRIMARY KEY  (Login)
 );
