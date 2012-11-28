@@ -1,8 +1,7 @@
 
 <?php
 /* USAGEM
- * Modificar $inputStr com a string a ser traduzida.
- *
+ * translate.php?str=string a traduzir
  * /
 
 class AccessTokenAuthentication {
@@ -152,7 +151,7 @@ try {
 
     
     //Input String.
-    $inputStr = 'gato cachorro google';
+    $inputStr = $_GET['str'];
     //HTTP Detect Method URL.
     $detectMethodUrl = "http://api.microsofttranslator.com/V2/Http.svc/Translate?to=en&contentType=text/plain&text=".urlencode($inputStr);
     //Call the curlRequest.

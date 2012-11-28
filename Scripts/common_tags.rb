@@ -36,6 +36,6 @@ end
 
 # ordena e imprime primeiras NUM_OF_TAGS tags
 h.sort_by{|tag,count| count}.reverse[0...NUM_OF_TAGS].each { |elem|
-  puts "#{elem[0]}"
+  print "#{elem[0]} "
 }
 
