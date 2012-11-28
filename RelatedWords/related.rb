@@ -13,6 +13,10 @@ if !tag then
   exit(-1)
 end
 
+if tag.index(/[0-9]/) then
+  exit(-1)
+end
+
 urls = [
     "http://www.merriam-webster.com/thesaurus/"+tag,
     "http://www.urbandictionary.com/thesaurus.php?term="+tag,

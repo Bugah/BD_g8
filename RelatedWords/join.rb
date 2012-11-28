@@ -1,10 +1,11 @@
-# Script utilizado para juntar os dois arquivos com tags, e misturar as tags relacionadas dos dois
+# Script utilizado para juntar os arquivos finais, e misturar as tags relacionadas deles
 # Utiliza hash para isso.
 
 file1 = File.open('related_words_final_merriam').read
 file2 = File.open('related_words_final_urbandictionary').read
+file3 = File.open('related_words_final_parte_2').read
 
-h = Hash.new("")
+h = Hash.new("  ")
 
 file1.each_line do |line|
   line = line.split(':')
@@ -13,10 +14,16 @@ end
 
 file2.each_line do |line|
   line = line.split(':')
-  h[line[0]] << line[1].to_s
+  h[line[0].to_s] += line[1].to_s
+end
+
+file3.each_line do |line|
+  line = line.split(':')
+  h[line[0].to_s] += line[1].to_s
 end
 
 final = String.new()
+
 
 h.each do |v,k|
   aux = k.gsub('  ',' ').gsub("\n",'')

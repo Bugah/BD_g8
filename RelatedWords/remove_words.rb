@@ -4,7 +4,7 @@
 
 file_name = ARGV[0]  
 
-if !tag then
+if !file_name then
   puts "Comando invalido! Usagem: remove_words.rb <file_name>"
   exit(-1)
 end
